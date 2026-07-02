@@ -27,6 +27,11 @@ jobs:
     name: deploying application to kubernetes
     runs-on: ubuntu-latest
     steps:
-      - name: starting deployment
-        run: echo "deployment completed"
-        
+      - name: starting deployment with multiple command
+        run: |
+          echo "deployment completed"
+          echo "second deployment completed"
+          echo $HOSTNAME
+          hostname -i
+          ps
+          sleep 20
