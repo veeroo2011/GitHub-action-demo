@@ -1,5 +1,13 @@
-name: myfirstworkflow
+name: my first workflow
 # name of the workflow
-on:
- push
- 
+on: push
+
+jobs:
+  Build:
+    name: job1
+    runs-on: ubuntu-latest
+    steps:
+      - name: check os release name of github hosted runner
+        run: cat /etc/os-release
+      - name: check hostname of the runner
+        run: hostname -i
