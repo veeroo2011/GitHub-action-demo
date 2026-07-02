@@ -1,0 +1,5 @@
+name: myfirstworkflow
+# name of the workflow
+on:
+ push
+ 
