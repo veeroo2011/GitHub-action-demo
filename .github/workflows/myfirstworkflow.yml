@@ -11,3 +11,22 @@ jobs:
         run: cat /etc/os-release
       - name: check hostname of the runner
         run: hostname -i
+  Test:
+    name: testing
+    runs-on: ubuntu-latest
+    steps:
+      - name: start testing of the application
+        run: echo "testing application"
+  code-scan:
+    name: code quality check
+    runs-on: ubuntu-latest
+    steps:
+      - name: starting snyk code scan
+        run: echo "code quality check completed"
+  Deploy:
+    name: deploying application to kubernetes
+    runs-on: ubuntu-latest
+    steps:
+      - name: starting deployment
+        run: echo "deployment completed"
+        
