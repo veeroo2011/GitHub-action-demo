@@ -48,11 +48,14 @@ jobs:
           hostname -i
           ps
           sleep 20
-  Test-macos:
-    name: testing on macos
-    runs-on: macos-latest
-    needs: Build
+  checkout:
+    name: checkout code from github repository
+    runs-on: ubuntu-latest
     steps:
-      - name: checking macos version
-        run: sw_vers
+      - name: listing files in the current directory
+        run: pwd & ls -latr
+      - name: checking out the code from github repository
+        uses: actions/checkout@v7.0.0
+      - name: listing files after checking out the code
+        run: pwd & ls -latr
 
