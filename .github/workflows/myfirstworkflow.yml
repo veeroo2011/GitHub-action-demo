@@ -98,6 +98,8 @@ jobs:
   Download-artifacts:
     name: Downloading artifacts from from previous jobs
     runs-on: ubuntu-latest
+    needs:
+      - artifacts-1 # this job will run after the artifacts-1 job is completed successfully
     steps:
       - name: checking file before downloading artifacts
         run: |
