@@ -95,6 +95,21 @@ jobs:
             ./artifact.txt
             artifacts/
             !**./artifact4.txt # this will exclude the artifact4.txt file from being uploaded to github
-
+  Download-artifacts:
+    name: Downloading artifacts from from previous jobs
+    runs-on: ubuntu-latest
+    steps:
+      - name: checking file before downloading artifacts
+        run: |
+          pwd
+          ls -ltr
+      - name: Dowloading artifacts
+        uses: actions/download-artifact@v5.0.0
+        with:
+          name: multiple-path-with-exclusion # this is the name of the artifact which we want to download from github
+      - name: checking file after downloading artifacts
+        run: |
+          pwd
+          ls -ltr
     
 
