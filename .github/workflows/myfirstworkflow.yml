@@ -1,147 +1,140 @@
-name: my first workflow
-# name of the workflow
+name: My First Workflow
+
 on: 
   push:
     branches:
       - main
-  #schedule:
-  #  - cron: '*/5 * * * *' # this workflow will run every 5 minutes
-  workflow_dispatch: # this will allow us to run the workflow manually from the github actions tab
+  workflow_dispatch: # allows manual runs from the Actions tab
+  # schedule:
+  #   - cron: '*/5 * * * *' # run every 5 minutes
 
 jobs:
   Build:
-    name: job1
+    name: Build Job
     runs-on: ubuntu-latest
     steps:
-      - name: check os release name of github hosted runner
+      - name: Check OS release
         run: cat /etc/os-release
-      - name: check hostname of the runner
+      - name: Check hostname
         run: hostname -i
+
   Test:
-    name: testing
+    name: Test Job
     runs-on: ubuntu-latest
     needs: Build
     steps:
-      - name: start testing of the application
-        run: echo "testing application"
-  code-scan:
-    name: code quality check
+      - name: Run tests
+        run: echo "Testing application"
+
+  Code-Scan:
+    name: Code Quality Check
     runs-on: ubuntu-latest
-    needs:
-      - Test # this job will run after the Test job is completed successfully
-      - Build # this job will run after the Build job is completed successfully
+    needs: [Build, Test]
     steps:
-      - name: starting snyk code scan
-        run: | # it is used to run multiple commands in a single step
-         echo "code quality check completed"
-         sleep 20
-  Deploy:
-    name: deploying application to kubernetes with dependency
-    runs-on: ubuntu-latest
-    needs: 
-      - code-scan
-    steps:
-      - name: starting deployment with multiple command
+      - name: Run code scan
         run: |
-          echo "deployment completed"
-          echo "second deployment completed"
+          echo "Code quality check completed"
+          sleep 20
+
+  Deploy:
+    name: Deploy Application
+    runs-on: ubuntu-latest
+    needs: Code-Scan
+    steps:
+      - name: Deployment steps
+        run: |
+          echo "Deployment completed"
+          echo "Second deployment completed"
           echo $HOSTNAME
           hostname -i
           ps
-  checkout:
-    name: checkout code from github repository
-    runs-on: ubuntu-latest
-    steps:
-      - name: listing files in the current directory
-        run: pwd & ls -latr
-      - name: checking out the code from github repository
-        uses: actions/checkout@v7.0.0
-      - name: listing files after checking out the code
-        run: pwd & ls -latr
-  artifacts-1:
-    name: uploading single artifact to github
-    runs-on: ubuntu-latest
-    steps:
-      - name: creating multiple files to upload as artifacts
-        run: |
-         echo "this is our first artifact $PWD" > artifact.txt
-         echo "this is our first artifact ls" > artifact4.txt
-         mkdir -p artifacts
-         echo "this is our second artifact $date" > artifacts/artifact2.txt
-         echo "this is our third artifact $hostname" > artifacts/artifact3.txt
 
-      - name: uploading the single artifact to github
-        uses: actions/upload-artifact@v7.0.0
+  Checkout:
+    name: Checkout Repository
+    runs-on: ubuntu-latest
+    steps:
+      - name: List files before checkout
+        run: pwd && ls -latr
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: List files after checkout
+        run: pwd && ls -latr
+
+  Artifacts:
+    name: Upload Artifacts
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create files
+        run: |
+          echo "First artifact $PWD" > artifact.txt
+          echo "Extra artifact file" > artifact4.txt
+          mkdir -p artifacts
+          echo "Second artifact $(date)" > artifacts/artifact2.txt
+          echo "Third artifact $(hostname)" > artifacts/artifact3.txt
+
+      - name: Upload single file
+        uses: actions/upload-artifact@v4
         with:
-          name: single_file # while uploading the artifact we can give a name to the artifact
-          path: ./artifact.txt # path of the artifact to be uploaded
-      - name: uploading multiple files from directory to github
-        uses: actions/upload-artifact@v7.0.0
+          name: single_file
+          path: artifact.txt
+
+      - name: Upload directory
+        uses: actions/upload-artifact@v4
         with:
           name: multiple-artifacts
           path: artifacts/
-      - name: uploading files from multiple paths to github
-        uses: actions/upload-artifact@v7.0.0
+
+      - name: Upload multiple paths
+        uses: actions/upload-artifact@v4
         with:
           name: multiple-path
           path: |
-            ./artifact.txt
+            artifact.txt
             artifacts/
-      - name: uploading files from multiple paths with exclusion to github
-        uses: actions/upload-artifact@v7.0.0
+
+      - name: Upload with exclusion
+        uses: actions/upload-artifact@v4
         with:
           name: multiple-path-with-exclusion
           path: |
-            ./artifact.txt
+            artifact.txt
             artifacts/
-            !**./artifact4.txt # this will exclude the artifact4.txt file from being uploaded to github
-  Download-artifacts:
-    name: Downloading artifacts from from previous jobs
+            !artifact4.txt
+
+  Download-Artifacts:
+    name: Download Artifacts
     runs-on: ubuntu-latest
-    needs:
-      - artifacts-1 # this job will run after the artifacts-1 job is completed successfully
+    needs: Artifacts
     steps:
-      - name: checking file before downloading artifacts
-        run: |
-          pwd
-          ls -ltr
-      - name: Dowloading artifacts
-        uses: actions/download-artifact@v5.0.0
+      - name: Check files before download
+        run: pwd && ls -ltr
+      - name: Download multiple-path artifact
+        uses: actions/download-artifact@v4
         with:
-          name: multiple-path # this is the name of the artifact )which was uploaded in previous job 
-                              #and name of the artifact must be same in both uploading job and downloading jobs. we want to download from github
-      - name: checking file after downloading artifacts
-        run: |
-          pwd
-          ls -ltr
-  Download-artifacts-custom-path:
-    name: Downloading artifacts  to custom path
+          name: multiple-path
+      - name: Check files after download
+        run: pwd && ls -ltr
+
+  Download-Artifacts-Custom:
+    name: Download Artifacts to Custom Path
     runs-on: ubuntu-latest
-    needs:
-      - artifacts-1 # this job will run after the artifacts-1 job is completed successfully
+    needs: Artifacts
     steps:
-      - name: creating custom directory for downloading artifacts      
+      - name: Create custom directories
         run: |
           mkdir -p single_file
           mkdir -p multiple-dir
-      - name: checking file before downloading artifacts
-        run: |
-          pwd
-          ls -ltr
-      - name: Dowloading single artifacts to custome directory
-        uses: actions/download-artifact@v5.0.0
+      - name: Download single_file artifact
+        uses: actions/download-artifact@v4
         with:
           name: single_file
-          path: single_file # provide name of diretory where we want to downlaod artifacts from github
-                              #and name of the artifact must be same in both uploading job and downloading jobs. we want to download from github
-      - name: Dowloading Directory artifacts to custome directory
-        uses: actions/download-artifact@v5.0.0
+          path: single_file
+      - name: Download multiple-path artifact
+        uses: actions/download-artifact@v4
         with:
           name: multiple-path
-          path: multiple-dir # provide name of diretory where we want to downlaod artifacts from github
-      - name: checking file after downloading artifacts
+          path: multiple-dir
+      - name: List downloaded files
         run: |
-          pwd
-          ls -ltr   multiple-dir/
-          ls -ltr   single_file/
-
+          ls -ltr single_file/
+          ls -ltr multiple-dir/
