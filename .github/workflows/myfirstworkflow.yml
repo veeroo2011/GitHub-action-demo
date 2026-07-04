@@ -71,24 +71,24 @@ jobs:
          echo "this is our third artifact $hostname" > artifacts/artifact3.txt
 
       - name: uploading the single artifact to github
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v7.0.0
         with:
           name: my-artifact # while uploading the artifact we can give a name to the artifact
           path: ./artifact.txt # path of the artifact to be uploaded
       - name: uploading multiple files from directory to github
-        uses: action/upload-artifact@v7
+        uses: actions/upload-artifact@v7.0.0
         with:
           name: multiple-artifacts
           path: artifacts/
       - name: uploading files from multiple paths to github
-        uses: action/upload-artifact@v7
+        uses: actions/upload-artifact@v7.0.0
         with:
           name: multiple-path
           path: |
             ./artifact.txt
             artifacts/
       - name: uploading files from multiple paths with exclusion to github
-        uses: action/upload-artifact@v7
+        uses: actions/upload-artifact@v7.0.0
         with:
           name: multiple-path-with-exclusion
           path: |
