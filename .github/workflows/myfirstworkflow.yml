@@ -106,7 +106,7 @@ jobs:
       - name: Dowloading artifacts
         uses: actions/download-artifact@v5.0.0
         with:
-          name: multiple-path-with-exclusion # this is the name of the artifact which we want to download from github
+          name: multiple-path # this is the name of the artifact which we want to download from github
       - name: checking file after downloading artifacts
         run: |
           pwd
