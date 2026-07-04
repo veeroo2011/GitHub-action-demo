@@ -73,7 +73,7 @@ jobs:
       - name: uploading the single artifact to github
         uses: actions/upload-artifact@v7.0.0
         with:
-          name: my-artifact # while uploading the artifact we can give a name to the artifact
+          name: single_file # while uploading the artifact we can give a name to the artifact
           path: ./artifact.txt # path of the artifact to be uploaded
       - name: uploading multiple files from directory to github
         uses: actions/upload-artifact@v7.0.0
@@ -108,10 +108,40 @@ jobs:
       - name: Dowloading artifacts
         uses: actions/download-artifact@v5.0.0
         with:
-          name: multiple-path # this is the name of the artifact which we want to download from github
+          name: multiple-path # this is the name of the artifact )which was uploaded in previous job 
+                              #and name of the artifact must be same in both uploading job and downloading jobs. we want to download from github
       - name: checking file after downloading artifacts
         run: |
           pwd
           ls -ltr
-    
+  Download-artifacts-custom-path:
+    name: Downloading artifacts  to custom path
+    runs-on: ubuntu-latest
+    needs:
+      - artifacts-1 # this job will run after the artifacts-1 job is completed successfully
+    steps:
+      - name: creating custom directory for downloading artifacts      
+        run: |
+          mkdir -p single_file
+          mkdir -p multiple-dir
+      - name: checking file before downloading artifacts
+        run: |
+          pwd
+          ls -ltr
+      - name: Dowloading single artifacts to custome directory
+        uses: actions/download-artifact@v5.0.0
+        with:
+          name: single_file
+          path: single_file # this is the name of the artifact )which was uploaded in previous job 
+                              #and name of the artifact must be same in both uploading job and downloading jobs. we want to download from github
+      - name: Dowloading irectory artifacts to custome directory
+        uses: actions/download-artifact@v5.0.0
+        with:
+          name: multiple-dir
+          path: multiple-path
+      - name: checking file after downloading artifacts
+        run: |
+          pwd
+          ls -ltr   multiple-dir/
+          ls -ltr   single_file/
 
