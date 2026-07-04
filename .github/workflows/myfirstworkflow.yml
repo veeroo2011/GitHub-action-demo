@@ -132,13 +132,13 @@ jobs:
         uses: actions/download-artifact@v5.0.0
         with:
           name: single_file
-          path: single_file # this is the name of the artifact )which was uploaded in previous job 
+          path: single_file # provide name of diretory where we want to downlaod artifacts from github
                               #and name of the artifact must be same in both uploading job and downloading jobs. we want to download from github
-      - name: Dowloading irectory artifacts to custome directory
+      - name: Dowloading Directory artifacts to custome directory
         uses: actions/download-artifact@v5.0.0
         with:
-          name: multiple-dir
-          path: multiple-path
+          name: multiple-path
+          path: multiple-dir # provide name of diretory where we want to downlaod artifacts from github
       - name: checking file after downloading artifacts
         run: |
           pwd
