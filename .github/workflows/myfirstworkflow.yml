@@ -27,14 +27,14 @@ jobs:
   code-scan:
     name: code quality check
     runs-on: ubuntu-latest
-    needs: 
+    needs:
       - Test # this job will run after the Test job is completed successfully
       - Build # this job will run after the Build job is completed successfully
-      steps:
+    steps:
       - name: starting snyk code scan
         run: | # it is used to run multiple commands in a single step
-          echo "code quality check completed"
-          sleep 20
+         echo "code quality check completed"
+         sleep 20
   Deploy:
     name: deploying application to kubernetes with dependency
     runs-on: ubuntu-latest
