@@ -4,8 +4,11 @@ on:
   push:
     branches:
       - develop
-      - 'feature-*'
-  workflow_dispatch: # allows manual runs from the Actions tab
+      - 'feature-*' # run workflow on any branch that starts with feature-
+  pull_request:
+    branches:
+      - main # trigger workflow on PRs targeting the main branch
+  workflow_dispatch: # Allow to run pipeline manually from github UI 
   # schedule:
   #   - cron: '*/5 * * * *' # run every 5 minutes
 
@@ -72,4 +75,6 @@ jobs:
         with:
           name: multiple_file
           path: multiple-dir
+      - name: fail this task
+        run: exit 1
 
