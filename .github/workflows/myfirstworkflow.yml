@@ -138,3 +138,29 @@ jobs:
         run: |
           ls -ltr single_file/
           ls -ltr multiple-dir/
+  Deployment-stg:
+    name: Deployment to staging environment
+    runs-on: ubuntu-latest
+    steps:
+      - name: Accessing environment variable
+        run: |
+          echo "Value of USER is ${{vars.USER}}"
+          echo " Value of host is ${{vars.HOSTNAME}}"
+      - name: Accessing environment secrets variable
+        run: |
+          echo "Value of USER is ${{secrets.PASSWORD}}"
+    environment:
+      name: STAGING
+  Deployment-prod:
+    name: Deployment to production environment
+    runs-on: ubuntu-latest
+    steps:
+      - name: Accessing environment variable
+        run: |
+          echo "Value of USER is ${{vars.USER}}"
+          echo " Value of host is ${{vars.HOSTNAME}}"
+      - name: Accessing environment secrets variable
+        run: |
+          echo "Value of USER is ${{secrets.PASSWORD}}"
+    environment:
+      name: PRODUCTION
