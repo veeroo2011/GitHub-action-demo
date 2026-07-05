@@ -89,7 +89,7 @@ jobs:
           echo "Workflow name is ${{ github.workflow }}"
           echo "Event name is ${{ github.event_name }}"
           echo "Actor name is ${{ github.actor }}"
-          echo "[INFO] New changes are added by $({ github.actor }} in ${{ github.ref_name }} branch."
+          echo "[INFO] New changes are added by ${{ github.actor }} in ${{ github.ref_name }} branch."
           echo "[INFO] Current Step is running on ${{ runner.os }}."
           echo "[INFO] Current JOB ID is ${{ job.check_run_id }}."
       - name: Accessing repository secrets
@@ -109,4 +109,17 @@ jobs:
     environment:
       name: staging
 
+  Deployment-prod:
+    name: Deployment to production environment
+    runs-on: ubuntu-latest
+    steps:
+      - name: Accessing environment variable
+        run: |
+          echo "Value of USER is ${{vars.USER}}"
+          echo " Value of host is ${{vars.HOSTNAME}}"
+      - name: Accessing environment secrets variable
+        run: |
+          echo "Value of USER is ${{secrets.PASSWORD}}"
+    environment:
+      name: PRODUCTION
 
