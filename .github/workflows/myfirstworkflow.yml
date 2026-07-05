@@ -151,6 +151,7 @@ jobs:
           echo "Value of USER is ${{secrets.PASSWORD}}"
     environment:
       name: STAGING
+    if: github.ref == 'refs/heads/feature-*'
   Deployment-prod:
     name: Deployment to production environment
     runs-on: ubuntu-latest
@@ -164,3 +165,4 @@ jobs:
           echo "Value of USER is ${{secrets.PASSWORD}}"
     environment:
       name: PRODUCTION
+    if: github.ref == 'refs/heads/develop'
