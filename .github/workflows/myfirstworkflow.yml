@@ -10,8 +10,11 @@ on:
     branches:
       - main # trigger workflow on PRs targeting the main branch
   workflow_dispatch: # Allow to run pipeline manually from github UI 
-  # schedule:
-  #   - cron: '*/5 * * * *' # run every 5 minutes
+
+env:  # defining global variable which can be used in any job or step
+  USER: Abhimanyu
+  APP_NAME: HOTEL MANAGEMENT SYSTEM
+  PORT: 8080
 
 jobs:
   Checkout:
@@ -76,4 +79,9 @@ jobs:
         with:
           name: multiple_file
           path: multiple-dir
+      - name: Accessing environment variable
+        run: |
+          echo "Value of USER is $USER"
+          echo "Value of APP_NAME is $APP_NAME"
+          echo "Value of PORT is $PORT"
 
