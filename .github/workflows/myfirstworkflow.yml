@@ -75,6 +75,4 @@ jobs:
         with:
           name: multiple_file
           path: multiple-dir
-      - name: fail this task
-        run: exit 1
 
