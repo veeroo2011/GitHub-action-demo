@@ -3,8 +3,9 @@ name: My First Workflow
 on: 
   push:
     branches:
-      - develop
-      - 'feature-*' # run workflow on any branch that starts with feature-
+      - main
+    #  - develop
+    #  - 'feature-*' # run workflow on any branch that starts with feature-
   pull_request:
     branches:
       - main # trigger workflow on PRs targeting the main branch
