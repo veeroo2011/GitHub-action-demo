@@ -28,7 +28,7 @@ jobs:
           mkdir -p reports
           pytest --junitxml=reports/Unit-test-results.xml --cov=. --cov-report=xml --cov-report=term-missing -v
       - name: Upload Code coverage Report
-        uses: actions/upload-artifact@5.0.0
+        uses: actions/upload-artifactv7.0.1
         with:
           name: Unit-test-report
           path: reports/
