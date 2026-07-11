@@ -10,7 +10,7 @@ on:
       - main
 
 jobs:
-  build:
+  Unit-Tests:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -33,3 +33,24 @@ jobs:
           name: Unit-test-report
           path: reports/
 
+  codeql:
+    name: CodeQL security Scan # use to scan the repo for secuirity vulnerabilities
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write # Required to upload the results of the codeql scan analysis results
+    strategy: # Required to run the codeql analysis
+      matrix:
+        language: ['python']
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@5.0.0
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: ${{ matrix.language }}
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "security"
