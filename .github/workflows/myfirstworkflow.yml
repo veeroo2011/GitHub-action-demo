@@ -87,7 +87,7 @@ jobs:
       - name: checkout Code
         uses: actions/checkout@v5.0.0
       - name: Setup Docker Buildx
-        uses: docker/setup-buildx-action@v5.0.0
+        uses: docker/setup-buildx-action@v4.2.0
       - name: Generate image tag
         id: vars
         run: |
