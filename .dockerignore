@@ -1,0 +1,27 @@
+# Ignore Git and CI/CD files
+.git
+.gitignore
+.github/
+sonar-project.properties
+
+# Ignore tests and temporary files
+tests/
+test/
+_pycache
+*. pyc
+*. pyo
+*. pyd
+*. log
+test _* |
+
+# Ignore local dev artifacts
+.env
+venv/
+. envrc
+*. sqlite3
+*. db
+.DS_Store
+
+# Ignore Docker build artifacts
+Dockerfile
+.dockerignore
