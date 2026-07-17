@@ -1,4 +1,5 @@
 # Ignore Git and CI/CD files
+!requirements.txt
 .git
 .gitignore
 .github/
