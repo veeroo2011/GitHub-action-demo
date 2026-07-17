@@ -103,7 +103,7 @@ jobs:
           tags: thinknyx_app:${{ steps.vars.outputs.IMAGE_TAGS }}
       - name: save docker images as tar
         run: |
-          docker save thinknyx_app:${{ steps.vars.outputs. IMAGE_TAGS }} -o thinknyx_app.tar
+          docker save thinknyx_app:${{ steps.vars.outputs.IMAGE_TAGS }} -o thinknyx_app.tar
       - name: upload docker image as artifacts
         uses: actions/upload-artifact@v5.0.0
         with:
