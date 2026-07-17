@@ -1,5 +1,4 @@
 # Ignore Git and CI/CD files
-!requirements.txt
 .git
 .gitignore
 .github/
@@ -8,12 +7,12 @@ sonar-project.properties
 # Ignore tests and temporary files
 tests/
 test/
-_pycache
+__pycache__/
 *.pyc
 *.pyo
 *.pyd
 *.log
-test_* |
+test_*
 
 # Ignore local dev artifacts
 .env
