@@ -20,9 +20,9 @@ build-essential gcc \
 COPY requirements.txt .
 
 # Install dependencies (ensure gunicorn is included)
-RUN pip install -- upgrade pip \
-&& pip install -- no-cache-dir -r requirements.txt \
-&& pip install -- no-cache-dir gunicorn
+RUN pip install --upgrade pip \
+&& pip install --no-cache-dir -r requirements.txt \
+&& pip install --no-cache-dir gunicorn
 
 # Copy only necessary application code (other files excluded via .dockerignore)
 COPY . .
@@ -36,4 +36,4 @@ EXPOSE 8000
 
 # Use Gunicorn for production serving
 # Replace `app:app` with your Flask instance path if different
-CMD ["gunicorn", " -- bind", "0.0.0.0:8000", "app:app"]
+CMD ["gunicorn", " --bind", "0.0.0.0:8000", "app:app"]
