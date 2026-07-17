@@ -12,7 +12,7 @@ ENV FLASK_ENV=production \
 PYTHONPATH=/app
 
 # Install minimal build tools (for any dependencies needing compilation)
-RUN apt-get update && apt-get install -y -- no-install-recommends \
+RUN apt-get update && apt-get install -y --no-install-recommends \
 build-essential gcc \
 && rm -rf /var/lib/apt/lists/*
 
