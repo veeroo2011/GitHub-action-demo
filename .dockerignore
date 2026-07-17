@@ -8,18 +8,18 @@ sonar-project.properties
 tests/
 test/
 _pycache
-*. pyc
-*. pyo
-*. pyd
-*. log
-test _* |
+*.pyc
+*.pyo
+*.pyd
+*.log
+test_* |
 
 # Ignore local dev artifacts
 .env
 venv/
-. envrc
-*. sqlite3
-*. db
+.envrc
+*.sqlite3
+*.db
 .DS_Store
 
 # Ignore Docker build artifacts
