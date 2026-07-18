@@ -130,7 +130,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
       - name: Push docker image to dockerhub
         run: |
-          IMAGE-TAG = ${{ needs.build-image.outputs.image-tags }}
+          IMAGE-TAG = "${{ needs.build-image.outputs.image-tags }}"
           docker tag thinknyx_app:$IMAGE-TAG ${{ secrets.DOCKER_USERNAME }}/thinknyx_app:$IMAGE-TAG
           docker push ${{ secrets.DOCKER_USERNAME }}/thinknyx_app:$IMAGE-TAG
 
