@@ -17,6 +17,10 @@ permissions:
 jobs:
   ci-cd-pipeline-job:
     uses: veeroo2011/reusable-workflows/.github/workflows/cicd_workflow.yml@main
+    with:
+      run_unit_tests: true
+      run_codeql: true
+      run_sonarqube: true
     secrets:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
