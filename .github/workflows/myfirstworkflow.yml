@@ -15,14 +15,39 @@ jobs:
     steps:
       - name: show hostname 
         run: |
-          echo "Hello World"
-          hostname
-          hostname -i
-          uname -a
+          echo "Hostname: $(hostname)"
+          echo "OS Version:"
+          Isb_release -a || cat /etc/os-release
+          echo "Runner Name: ${{ runner.name }}"
+          echo "Runner OS: ${{ runner.os }}"
+
   self-hosted:
+    runs-on: arc-demo
+    steps:
+      - name: show system information 
+        run: |
+          echo "Hostname: $(hostname)"
+          echo "OS Version:"
+          Isb_release -a || cat /etc/os-release
+          echo "Runner Name: ${{ runner.name }}"
+          echo "Runner OS: ${{ runner.os }}"
+          sleep 30
+  self-hosted-2:
+    runs-on: arc-demo
+    steps:
+      - name: show system information 
+        run: |
+          echo "Hostname: $(hostname)"
+          echo "OS Version:"
+          Isb_release -a || cat /etc/os-release
+          echo "Runner Name: ${{ runner.name }}"
+          echo "Runner OS: ${{ runner.os }}"
+          sleep 30
+
+  self-hosted-3:
     runs-on: [self-hosted, macOS] # use as list when using multiple labels.it will select runner once it has both label attached to it
     steps:
-      - name: show hostname 
+      - name: show system information of macbook self-hosted runner 
         run: |
           echo "Hello World on self-hosted runner"
           sw_vers
