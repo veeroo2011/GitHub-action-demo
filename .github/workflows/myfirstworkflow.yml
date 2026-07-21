@@ -20,7 +20,7 @@ jobs:
           hostname -i
           uname -a
   self-hosted:
-    runs-on: self-hosted
+    runs-on: [self-hosted, macOS] # use as list when using multiple labels.it will select runner once it has both label attached to it
     steps:
       - name: show hostname 
         run: |
