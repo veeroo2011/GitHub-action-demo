@@ -1,4 +1,4 @@
-name: My First Workflow
+name: This workflow is a demo for reusable workflows
 
 on: 
   push:
@@ -20,7 +20,7 @@ jobs:
     with:
       run_unit_tests: true
       run_codeql: true
-      run_sonarqube: true
+      run_sonarqube: false
     secrets:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
