@@ -1,0 +1,28 @@
+name: This workflow is a demo for reusable workflows
+
+on: 
+  push:
+    branches:
+      - main
+  workflow_dispatch: # allows manual runs from the Actions tab
+  pull_request:
+    branches:
+      - main
+permissions:
+  actions: read
+  contents: read
+  security-events: write 
+  packages: write
+
+jobs:
+  ci-cd-pipeline-job:
+    uses: veeroo2011/reusable-workflows/.github/workflows/cicd_workflow.yml@main
+    with:
+      run_unit_tests: true
+      run_codeql: true
+      run_sonarqube: false
+    secrets:
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+
