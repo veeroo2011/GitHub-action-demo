@@ -29,6 +29,9 @@ jobs:
     name: Deploy to Kubernetes
     runs-on: self-hosted
     needs: ci-cd-pipeline-job
+    environment: staging
+    env:
+      NAMESPACE: ${{ vars.NAMESPACE }}
     steps:
       - name: checkout
         uses: actions/checkout@v3
