@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: thinknyxapp
+  labels:
+    app: thinknyxapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: thinknyxapp
+  template:
+    metadata:
+      labels:
+        app: thinknyxapp
+    spec :
+      containers:
+        - name: thinknyxapp
+          image: veeroo2011/thinknyx_app:29766532765-43bafb7
+          ports:
+            - containerPort: 8000
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "50m"
+            limits:
+              memory: "128Mi"
+              cpu: "250m"
