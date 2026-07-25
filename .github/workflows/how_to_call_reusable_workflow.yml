@@ -57,7 +57,7 @@ jobs:
       - name: update image name in deployment YAML
         run: |
           IMAGE_TAGS="${{ github.run_id}}-${GITHUB_SHA::7}"
-          export IMAGE="thinknyx_app:$IMAGE_TAG:${IMAGE_TAGS}"
+          export IMAGE="veeroo2011/thinknyx_app:${IMAGE_TAGS}"
           yq e '.spec.template.spec.containers[0].image = strenv(IMAGE)' manifests/deployment.yaml -i
           cat manifests/deployment.yaml
       - name: Create Namesapace if not exists
@@ -68,6 +68,6 @@ jobs:
           kubectl apply -f manifests/ -n $NAMESPACE --insecure-skip-tls-verify
       - name: verify deployment
         run: |
-          kubectl rollout status deployment/thinknyxapp -n $NAMESPACE --insecure-skip-tls-verify
+          kubectl rollout status deployment/thinknyx_app -n $NAMESPACE --insecure-skip-tls-verify
           kubectl get all -n $NAMESPACE --insecure-skip-tls-verify
 
