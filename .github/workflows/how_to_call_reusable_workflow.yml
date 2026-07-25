@@ -68,6 +68,6 @@ jobs:
           kubectl apply -f manifests/ -n $NAMESPACE --insecure-skip-tls-verify
       - name: verify deployment
         run: |
-          kubectl rollout status deployment/thinknyx_app -n $NAMESPACE --insecure-skip-tls-verify
+          kubectl rollout status deployment/thinknyxapp -n $NAMESPACE --insecure-skip-tls-verify
           kubectl get all -n $NAMESPACE --insecure-skip-tls-verify
 
