@@ -61,12 +61,12 @@ jobs:
           cat manifests/deployment.yaml
       - name: Create Namesapace if not exists
         run: |
-          kubectl get namespace $NAMESPACE || kubectl create namespace $NAMESPACE
+          kubectl get namespace $NAMESPACE --insecure-skip-tls-verify || kubectl create namespace $NAMESPACE --insecure-skip-tls-verify
       - name: Deploy to Kubernetes Cluster
         run: |
-          kubectl apply -f manifests/ -n $NAMESPACE
+          kubectl apply -f manifests/ -n $NAMESPACE --insecure-skip-tls-verify
       - name: verify deployment
         run: |
-          kubectl rollout status deployment/thinknyxapp -n $NAMESPACE
-          kubectl get all -n $NAMESPACE
+          kubectl rollout status deployment/thinknyxapp -n $NAMESPACE --insecure-skip-tls-verify
+          kubectl get all -n $NAMESPACE --insecure-skip-tls-verify
 
