@@ -46,7 +46,7 @@ jobs:
           mkdir -p ~/.kube
           echo "${{ secrets.KUBECONFIG }}" > ~/.kube/config
           cat ~/.kube/config
-          kubectl version
+          kubectl version --insecure-skip-tls-verify
           kubectl get nodes --insecure-skip-tls-verify
       - name: Install yq
         run: |
