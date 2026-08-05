@@ -28,7 +28,7 @@ jobs:
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
   deploy-job-k8s:
     name: Deploy to Kubernetes
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     needs: ci-cd-pipeline-job
     environment: staging
     env:
