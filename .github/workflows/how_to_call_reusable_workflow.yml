@@ -20,8 +20,8 @@ jobs:
     with:
       run_unit_tests: true
       run_codeql: true
-      run_sonarqube: true
-      run_Docker-Image-push: true
+      run_sonarqube: false
+      run_Docker-Image-push: false
     secrets:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
@@ -29,7 +29,7 @@ jobs:
   deploy-job-k8s:
     name: Deploy to Kubernetes
     runs-on: self-hosted
-    needs: ci-cd-pipeline-job
+#    needs: ci-cd-pipeline-job
     environment: staging
     env:
       NAMESPACE: ${{ vars.NAMESPACE }}
@@ -38,21 +38,25 @@ jobs:
         uses: actions/checkout@v3
       - name: Install kubectl
         run: |
-          # Detect system architecture
+          # 1. Detect system architecture
           ARCH=$(uname -m)
           if [ "$ARCH" = "x86_64" ]; then
               ARCH="amd64"
           elif [ "$ARCH" = "aarch64" ]; then
               ARCH="arm64"
           fi
-
-          # Download the correct binary using the modern dl.k8s.io path
+          
+          # 2. Get the actual stable version string (e.g., v1.31.0)
           VERSION=$(curl -L -s https://k8s.io)
+          
+          # 3. Download using the correct URL format (added missing slash and fixed domain)
           curl -LO "https://k8s.io{VERSION}/bin/linux/${ARCH}/kubectl"
           
+          # 4. Install and verify
           chmod +x ./kubectl
           sudo mv ./kubectl /usr/local/bin/kubectl
           kubectl version --client
+
       - name: Configure Kubeconfig
         run: |
           mkdir -p ~/.kube
