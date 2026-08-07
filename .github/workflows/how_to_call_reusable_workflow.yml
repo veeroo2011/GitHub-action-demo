@@ -67,7 +67,14 @@ jobs:
           kubectl get nodes
       - name: Install yq
         run: |
-          sudo curl -L https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -o /usr/local/bin/yq
+          # 1. Detect system architecture
+          ARCH=$(uname -m)
+          if [ "$ARCH" = "x86_64" ]; then
+              ARCH="amd64"
+          elif [ "$ARCH" = "aarch64" ]; then
+              ARCH="arm64"
+          fi
+          sudo curl -L https://github.com/mikefarah/yq/releases/latest/download/yq_linux_${ARCH} -o /usr/local/bin/yq
           sudo chmod +x /usr/local/bin/yq
           yq --version
       - name: update image name in deployment YAML
