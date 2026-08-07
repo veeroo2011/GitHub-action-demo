@@ -46,11 +46,12 @@ jobs:
               ARCH="arm64"
           fi
           
-          # 2. Get the actual stable version string (e.g., v1.31.0)
-          VERSION=$(curl -L -s https://k8s.io)
           
-          # 3. Download using the correct URL format (added missing slash and fixed domain)
-          curl -LO "https://k8s.io{VERSION}/bin/linux/${ARCH}/kubectl"
+          # 2. Get the actual stable version string (Notice the dl.k8s.io domain)
+          VERSION="v1.34.0"
+          
+          # 3. Download using the correct URL format (Notice the $ and the /)
+          curl -LO "https://dl.k8s.io/release/${VERSION}/bin/linux/${ARCH}/kubectl"
           
           # 4. Install and verify
           chmod +x ./kubectl
