@@ -20,8 +20,8 @@ jobs:
     with:
       run_unit_tests: true
       run_codeql: true
-      run_sonarqube: false
-      run_Docker-Image-push: false
+      run_sonarqube: true
+      run_Docker-Image-push: true
     secrets:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
@@ -29,7 +29,7 @@ jobs:
   deploy-job-k8s:
     name: Deploy to Kubernetes
     runs-on: self-hosted
-#    needs: ci-cd-pipeline-job
+    needs: ci-cd-pipeline-job
     environment: staging
     env:
       NAMESPACE: ${{ vars.NAMESPACE }}
