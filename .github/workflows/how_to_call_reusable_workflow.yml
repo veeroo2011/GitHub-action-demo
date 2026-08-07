@@ -28,7 +28,7 @@ jobs:
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
   deploy-job-k8s:
     name: Deploy to Kubernetes
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: ci-cd-pipeline-job
     environment: staging
     env:
@@ -47,8 +47,8 @@ jobs:
           mkdir -p ~/.kube
           echo "${{ secrets.KUBECONFIG }}" > ~/.kube/config
           cat ~/.kube/config
-          kubectl version --insecure-skip-tls-verify
-          kubectl get nodes --insecure-skip-tls-verify
+          kubectl version
+          kubectl get nodes
       - name: Install yq
         run: |
           sudo curl -L https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -o /usr/local/bin/yq
@@ -62,12 +62,12 @@ jobs:
           cat manifests/deployment.yaml
       - name: Create Namesapace if not exists
         run: |
-          kubectl get namespace $NAMESPACE --insecure-skip-tls-verify || kubectl create namespace $NAMESPACE --insecure-skip-tls-verify
+          kubectl get namespace $NAMESPACE || kubectl create namespace $NAMESPACE
       - name: Deploy to Kubernetes Cluster
         run: |
-          kubectl apply -f manifests/ -n $NAMESPACE --insecure-skip-tls-verify
+          kubectl apply -f manifests/ -n $NAMESPACE
       - name: verify deployment
         run: |
-          kubectl rollout status deployment/thinknyxapp -n $NAMESPACE --insecure-skip-tls-verify
-          kubectl get all -n $NAMESPACE --insecure-skip-tls-verify
+          kubectl rollout status deployment/thinknyxapp -n $NAMESPACE
+          kubectl get all -n $NAMESPACE
 
