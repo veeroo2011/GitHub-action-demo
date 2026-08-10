@@ -27,70 +27,10 @@ jobs:
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
   deploy-job-k8s:
-    name: Deploy to Kubernetes
-    runs-on: self-hosted
-    needs: ci-cd-pipeline-job
-    environment: staging
-    env:
-      NAMESPACE: ${{ vars.NAMESPACE }}
-    steps:
-      - name: checkout
-        uses: actions/checkout@v3
-      - name: Install kubectl
-        run: |
-          # 1. Detect system architecture
-          ARCH=$(uname -m)
-          if [ "$ARCH" = "x86_64" ]; then
-              ARCH="amd64"
-          elif [ "$ARCH" = "aarch64" ]; then
-              ARCH="arm64"
-          fi
-          
-          
-          # 2. Get the actual stable version string (Notice the dl.k8s.io domain)
-          VERSION="v1.34.0"
-          
-          # 3. Download using the correct URL format (Notice the $ and the /)
-          curl -LO "https://dl.k8s.io/release/${VERSION}/bin/linux/${ARCH}/kubectl"
-          
-          # 4. Install and verify
-          chmod +x ./kubectl
-          sudo mv ./kubectl /usr/local/bin/kubectl
-          kubectl version --client
-
-      - name: Configure Kubeconfig
-        run: |
-          mkdir -p ~/.kube
-          echo "${{ secrets.KUBECONFIG }}" > ~/.kube/config
-          cat ~/.kube/config
-          kubectl version
-          kubectl get nodes
-      - name: Install yq
-        run: |
-          # 1. Detect system architecture
-          ARCH=$(uname -m)
-          if [ "$ARCH" = "x86_64" ]; then
-              ARCH="amd64"
-          elif [ "$ARCH" = "aarch64" ]; then
-              ARCH="arm64"
-          fi
-          sudo curl -L https://github.com/mikefarah/yq/releases/latest/download/yq_linux_${ARCH} -o /usr/local/bin/yq
-          sudo chmod +x /usr/local/bin/yq
-          yq --version
-      - name: update image name in deployment YAML
-        run: |
-          IMAGE_TAGS="${{ github.run_id}}-${GITHUB_SHA::7}"
-          export IMAGE="veeroo2011/thinknyx_app:${IMAGE_TAGS}"
-          yq e '.spec.template.spec.containers[0].image = strenv(IMAGE)' manifests/deployment.yaml -i
-          cat manifests/deployment.yaml
-      - name: Create Namesapace if not exists
-        run: |
-          kubectl get namespace $NAMESPACE || kubectl create namespace $NAMESPACE
-      - name: Deploy to Kubernetes Cluster
-        run: |
-          kubectl apply -f manifests/ -n $NAMESPACE
-      - name: verify deployment
-        run: |
-          kubectl rollout status deployment/thinknyxapp -n $NAMESPACE
-          kubectl get all -n $NAMESPACE
-
+    uses: veeroo2011/reusable-workflows/.github/workflows/deploy_with_kubectl.yaml@main
+    with:
+      NAMESPACE: 'STAGING'
+      IMAGE_NAME: 'veeroo2011/thinknyx_app'
+      RUNNER_LABELS: 'ubuntu-latest'
+    secrets:
+      KUBECONFIG: ${{ secrets.KUBECONFIG }}
