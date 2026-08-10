@@ -27,6 +27,9 @@ jobs:
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
   deploy-job-k8s:
+    if: ${{ success() }}
+    name: Deploy to Kubernetes
+    needs: ci-cd-pipeline-job
     uses: veeroo2011/reusable-workflows/.github/workflows/deploy_with_kubectl.yaml@main
     with:
       NAMESPACE: 'staging'
