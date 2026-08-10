@@ -15,7 +15,7 @@ permissions:
   packages: write
 
 jobs:
-  ci-cd-pipeline-job:
+  build:
     uses: veeroo2011/reusable-workflows/.github/workflows/cicd_workflow.yml@main
     with:
       run_unit_tests: true
@@ -29,11 +29,10 @@ jobs:
   deploy-job-k8s:
     if: ${{ success() }}
     name: Deploy to Kubernetes
-    needs: ci-cd-pipeline-job
+    needs: build
     uses: veeroo2011/reusable-workflows/.github/workflows/deploy_with_kubectl.yaml@main
     with:
       NAMESPACE: 'staging'
       IMAGE_NAME: 'veeroo2011/thinknyx_app'
-      RUNNER_LABELS: 'ubuntu-latest'
     secrets:
       KUBECONFIG: ${{ secrets.KUBECONFIG }}
