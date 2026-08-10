@@ -29,7 +29,7 @@ jobs:
   deploy-job-k8s:
     uses: veeroo2011/reusable-workflows/.github/workflows/deploy_with_kubectl.yaml@main
     with:
-      NAMESPACE: 'STAGING'
+      NAMESPACE: 'staging'
       IMAGE_NAME: 'veeroo2011/thinknyx_app'
       RUNNER_LABELS: 'ubuntu-latest'
     secrets:
