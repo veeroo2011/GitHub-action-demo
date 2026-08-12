@@ -1,0 +1,55 @@
+name: My First GitHub Action
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch: # allows manual runs from the Actions tab
+    inputs:
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        type: choice
+        options:
+          - dev
+          - qa
+          - perf
+          - staging
+          - production
+      action:
+        description: Action to perform
+        required: true
+        type: choice
+        options:
+          - plan
+          - apply
+          - destroy
+  pull_request:
+    branches:
+      - main
+      - deploy-using-kubernetes
+
+jobs:
+  Repo_info:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v3
+      - name:  print hello
+        run: echo "Hello World"
+      - name: Show repository information
+        run: |
+          echo "Repository Name: ${{ github.repository }}"
+          echo "Repository Owner: ${{ github.repository_owner }}"
+          echo "Repository URL: ${{ github.server_url }}/${{ github.repository }}"
+          echo "Repository Default Branch: ${{ github.event.repository.default_branch }}"
+          echo "Repository Visibility: ${{ github.event.repository.visibility }}"
+          echo "Repository Created At: ${{ github.event.repository.created_at }}"
+          echo "Repository Updated At: ${{ github.event.repository.updated_at }}"
+          echo "Repository Actor: ${{ github.actor }}"
+      - name: List files in the repository
+        run: ls -lR
+      - name: show  environment
+        run: |
+         echo "Environment: is ${{inputs.environment}}"
+         echo "Action: is ${{inputs.action}}"

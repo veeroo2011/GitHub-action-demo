@@ -15,14 +15,24 @@ permissions:
   packages: write
 
 jobs:
-  ci-cd-pipeline-job:
+  build:
     uses: veeroo2011/reusable-workflows/.github/workflows/cicd_workflow.yml@main
     with:
       run_unit_tests: true
       run_codeql: true
-      run_sonarqube: false
+      run_sonarqube: true
+      run_Docker-Image-push: true
     secrets:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-
+  deploy-job-k8s:
+    if: ${{ success() }}
+    name: Deploy to Kubernetes
+    needs: build
+    uses: veeroo2011/reusable-workflows/.github/workflows/deploy_with_kubectl.yaml@main
+    with:
+      NAMESPACE: 'staging'
+      IMAGE_NAME: 'veeroo2011/thinknyx_app'
+    secrets:
+      KUBECONFIG: ${{ secrets.KUBECONFIG }}
