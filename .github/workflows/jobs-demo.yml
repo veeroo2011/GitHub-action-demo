@@ -1,0 +1,41 @@
+name: Multiple jobs
+
+on:
+  push:
+    branches:
+      - main
+      - deploy-using-kubernetes
+    paths:
+     - '.github/workflows/jobs-demo.yml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/jobs-demo.yml'
+  workflow_dispatch: # allows manual runs from the Actions tab
+jobs:
+    Build:
+      runs-on: ubuntu-latest
+      steps:
+        - name: build
+          run: |
+            echo "Build job is running"
+            sleep 10
+            echo "Build job completed"
+    Test:
+      runs-on: ubuntu-latest
+      steps:
+        - name: test
+          run: |
+            echo "Test job is running"
+            sleep 10
+            echo "Test job completed"
+    deploy:
+      runs-on: ubuntu-latest
+      steps:
+        - name: deploy
+          run: |
+            echo "Deploy job is running"
+            sleep 10
+            echo "Deploy job completed"
+
