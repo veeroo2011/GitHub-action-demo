@@ -5,6 +5,13 @@ on:
     branches:
       - main
       - deploy-using-kubernetes
+    paths:
+     - '.github/workflows/first.yml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/first.yml'
   workflow_dispatch: # allows manual runs from the Actions tab
     inputs:
       environment:
@@ -25,9 +32,6 @@ on:
           - plan
           - apply
           - destroy
-  pull_request:
-    branches:
-      - main
 
 jobs:
   Repo_info:
@@ -36,7 +40,7 @@ jobs:
       - name: checkout code
         uses: actions/checkout@v6
       - name:  print hello
-        run: echo "Hello World"
+        run: echo "Hello World of gitAction CI/CD pipeline"
       - name: Show repository information
         run: |
           echo "Repository Name: ${{ github.repository }}"
