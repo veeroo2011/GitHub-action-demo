@@ -49,7 +49,7 @@ jobs:
           echo "Repository Actor: ${{ github.actor }}"
       - name: List files in the repository
         run: ls -lR
-      - name: show  environment
+      - name: show  environment based parameter
         run: |
          echo "Environment: is ${{ inputs.environment }}"
          echo "Action: is ${{ inputs.action }}"
