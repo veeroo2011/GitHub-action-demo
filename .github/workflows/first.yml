@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - deploy-using-kubernetes
   workflow_dispatch: # allows manual runs from the Actions tab
     inputs:
       environment:
@@ -27,14 +28,13 @@ on:
   pull_request:
     branches:
       - main
-      - deploy-using-kubernetes
 
 jobs:
   Repo_info:
     runs-on: ubuntu-latest
     steps:
       - name: checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v6
       - name:  print hello
         run: echo "Hello World"
       - name: Show repository information
@@ -49,7 +49,7 @@ jobs:
           echo "Repository Actor: ${{ github.actor }}"
       - name: List files in the repository
         run: ls -lR
-      - name: show  environment
+      - name: show  environment based parameter
         run: |
-         echo "Environment: is ${{inputs.environment}}"
-         echo "Action: is ${{inputs.action}}"
+         echo "Environment: is ${{ inputs.environment }}"
+         echo "Action: is ${{ inputs.action }}"
