@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - deploy-using-kubernetes
   workflow_dispatch: # allows manual runs from the Actions tab
     inputs:
       environment:
@@ -27,7 +28,6 @@ on:
   pull_request:
     branches:
       - main
-      - deploy-using-kubernetes
 
 jobs:
   Repo_info:
@@ -51,5 +51,5 @@ jobs:
         run: ls -lR
       - name: show  environment
         run: |
-         echo "Environment: is ${{inputs.environment}}"
-         echo "Action: is ${{inputs.action}}"
+         echo "Environment: is ${{ inputs.environment }}"
+         echo "Action: is ${{ inputs.action }}"
