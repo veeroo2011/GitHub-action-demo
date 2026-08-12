@@ -8,6 +8,8 @@ on:
   pull_request:
     branches:
       - main
+    paths:
+      - '.github/workflows/how_to_call_reusable_workflow.yml'
 permissions:
   actions: read
   contents: read
