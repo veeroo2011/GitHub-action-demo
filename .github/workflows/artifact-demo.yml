@@ -1,0 +1,34 @@
+name: Artifact Demo
+
+on:
+  workflow_dispatch: # allows manual runs from the Actions tab
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: create build file
+        run: 
+          echo "This is a build artifact" > build.txt
+          echo "This file is created by build job">> build.txt
+      - name: show build file
+        run: cat build.txt
+      - name: upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-file
+          path: build.txt
+  test:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: check build artifact before downloading
+        run: ls -lR
+      - name: download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: build-file
+      - name: check build artifact after downloading
+        run: ls -lR
+      - name: show build file
+        run: cat build.txt
