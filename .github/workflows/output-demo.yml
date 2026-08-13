@@ -6,7 +6,7 @@ on:
 jobs:
   prepare:
     runs-on: ubuntu-latest
-    outputs:
+    outputs: # if this output value needs to be used in another job, it must be defined here
       Full_Name: ${{ steps.set_env.outputs.F_Name }}
       last_name: ${{ steps.set_env.outputs.L_Name }}
     steps:
