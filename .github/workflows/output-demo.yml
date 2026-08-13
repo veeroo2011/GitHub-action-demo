@@ -6,19 +6,23 @@ on:
 jobs:
   prepare:
     runs-on: ubuntu-latest
-    outputs:
-      Full_Name: ${{ steps.set_env.outputs.F_Name}}
+    outputs: # if this output value needs to be used in another job, it must be defined here
+      Full_Name: ${{ steps.set_env.outputs.F_Name }}
+      last_name: ${{ steps.set_env.outputs.L_Name }}
     steps:
       - name: prepare environment
         id: set_env
         run: |
-          echo "F_Name=Abhimanyu" >> $GITHUB_OUTPUT"
+          echo "F_Name=Abhimanyu" >> "$GITHUB_OUTPUT"
+          echo "L_Name=Kumar" >> "$GITHUB_OUTPUT"
       - name: show F_Name in this job
         run: echo "F_Name is ${{ steps.set_env.outputs.F_Name }}"
+      - name: show L_Name in this job
+        run: echo "L_Name is ${{ steps.set_env.outputs.L_Name }}"
   test:
     runs-on: ubuntu-latest
     needs: prepare
     steps:
       - name: Retrieve Full_Name prepared in previous job
-        run: echo "Full_Name is ${{ needs.prepare.outputs.Full_Name }}"
+        run: echo "Full_Name is ${{ needs.prepare.outputs.Full_Name }} ${{ needs.prepare.outputs.last_name }}"
   
