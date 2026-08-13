@@ -1,0 +1,24 @@
+name: output demo
+
+on:
+  workflow_dispatch: # allows manual runs from the Actions tab
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    outputs:
+      Full_Name: ${{ steps.set_env.outputs.F_Name}}
+    steps:
+      - name: prepare environment
+        id: set_env
+        run: |
+          echo "F_Name=Abhimanyu" >> $GITHUB_OUTPUT"
+      - name: show F_Name in this job
+        run: echo "F_Name is ${{ steps.set_env.outputs.F_Name }}"
+  test:
+    runs-on: ubuntu-latest
+    needs: prepare
+    steps:
+      - name: Retrieve Full_Name prepared in previous job
+        run: echo "Full_Name is ${{ needs.prepare.outputs.Full_Name }}"
+  
