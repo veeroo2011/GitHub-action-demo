@@ -12,7 +12,7 @@ jobs:
       - name: prepare environment
         id: set_env
         run: |
-          echo "F_Name=Abhimanyu" >> $GITHUB_OUTPUT"
+          echo "F_Name=Abhimanyu" >> "$GITHUB_OUTPUT"
       - name: show F_Name in this job
         run: echo "F_Name is ${{ steps.set_env.outputs.F_Name }}"
   test:
