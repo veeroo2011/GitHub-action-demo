@@ -1,0 +1,43 @@
+name: dynamic output demo
+
+on:
+  workflow_dispatch: # allows manual runs from the Actions tab
+    inputs:
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        type: choice
+        options:
+          - dev
+          - qa
+          - perf
+          - staging
+          - production
+      action:
+        description: Action to perform
+        required: true
+        type: choice
+        options:
+          - plan
+          - apply
+          - destroy
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    outputs:
+      selected_env: ${{ steps.select_env_action.outputs.Environment }}
+      selected_action: ${{ steps.select_env_action.outputs.Action }}
+    steps:
+      - name: select environment and action
+        id: select_env_action
+        run: |
+          echo "Environment=${{ inputs.environment }}" >> "$GITHUB_OUTPUT"
+          echo "Action=${{ inputs.action }}" >> "$GITHUB_OUTPUT"
+  deploy:
+    runs-on: ubuntu-latest
+    needs: prepare
+    steps:
+      - name: show selected environment and action by user
+        run: |
+          echo "Environment is ${{ needs.prepare.outputs.selected_env }} \n and deploy to ${{ needs.prepare.outputs.selected_action }}"
+        
