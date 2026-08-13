@@ -24,7 +24,5 @@ jobs:
     needs: prepare
     steps:
       - name: Retrieve Full_Name prepared in previous job
-        run: echo "Full_Name is ${{ needs.prepare.outputs.Full_Name }}"
-      - name: Retrieve last_name prepared in previous job
-        run: echo "last_name is ${{ needs.prepare.outputs.last_name }}"
+        run: echo "Full_Name is ${{ needs.prepare.outputs.Full_Name }} ${{ needs.prepare.outputs.last_name }}"
   
