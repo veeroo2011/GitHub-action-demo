@@ -2,10 +2,20 @@ name: variable demo
 
 on:
   workflow_dispatch: # allows manual runs from the Actions tab
+    inputs:
+      name:
+        description: 'Enter your name'
+        required: true
+        default: 'Abhi'
+      age:
+        description: 'Enter your age'
+        required: true
+        default: 25
+        type: number
 
 env:
-  Global_Name: "Abhi"
-  Global_Age: 25
+  Global_Name: ${{ inputs.name }}
+  Global_Age: ${{ inputs.age }}
   Version: ${{ vars.VERSION }}
 
 jobs:
