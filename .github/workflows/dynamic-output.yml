@@ -39,5 +39,6 @@ jobs:
     steps:
       - name: show selected environment and action by user
         run: |
-          echo "Environment is ${{ needs.prepare.outputs.selected_env }} \n and deploy to ${{ needs.prepare.outputs.selected_action }}"
+          echo "Environment is ${{ needs.prepare.outputs.selected_env }} "
+          echo "Deploy to ${{ needs.prepare.outputs.selected_action }}"
         
