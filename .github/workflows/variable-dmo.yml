@@ -1,0 +1,34 @@
+name: variable demo
+
+on:
+  workflow_dispatch: # allows manual runs from the Actions tab
+
+env:
+  Global_Name: "Abhi"
+  Global_Age: 25
+
+jobs:
+  Test:
+    runs-on: ubuntu-latest
+    env:
+      Job_env: Dev
+    steps:
+      - name: Accessing Global Variables
+        run: |
+          echo "Name is ${{ env.Global_Name }}"
+          echo "Age is $Global_Age"
+      - name: Accessing job specific env Variables
+        run: |
+          echo "$Job_env"
+      - name: Accessing step specific Variables
+        env:
+          step_message: "value from step"
+        run: |
+          echo "$step_message"
+      - name: Accessing step env variable in different steps
+        run: |
+          echo "step_message is $step_message"
+
+
+
+  
