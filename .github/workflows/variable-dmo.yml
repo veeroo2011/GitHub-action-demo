@@ -19,10 +19,12 @@ env:
   Version: ${{ vars.VERSION }}
 
 jobs:
-  Test:
+  Env_preparation:
     runs-on: ubuntu-latest
     env:
       Job_env: Dev
+    outputs:
+      p_version: ${{ steps.plateform_version.outputs.PLATEFORM_VERSION }}
     steps:
       - name: Accessing Global Variables
         run: |
@@ -46,6 +48,17 @@ jobs:
       - name: Accessing secrets defined in github repository settings
         run: |
           echo "Secret variable is ${{ secrets.DOCKER_PASSWORD }}"
+      - name: create an output and display value in next job
+        id: plateform_version
+        run: |
+          echo "PLATEFORM_VERSION=MAC" >> "$GITHUB_OUTPUT"
+  test:
+    runs-on: ubuntu-latest
+    needs: Env_preparation
+    steps:
+      - name: Accessing output from previous job
+        run: |
+          echo "plateform version is ${{ needs.Env_preparation.outputs.p_version }}"
 
 
 
