@@ -2,16 +2,29 @@ name: variable demo
 
 on:
   workflow_dispatch: # allows manual runs from the Actions tab
+    inputs:
+      name:
+        description: 'Enter your name'
+        required: true
+        default: 'Abhi'
+      age:
+        description: 'Enter your age'
+        required: true
+        default: 25
+        type: number
 
 env:
-  Global_Name: "Abhi"
-  Global_Age: 25
+  Global_Name: ${{ inputs.name }}
+  Global_Age: ${{ inputs.age }}
+  Version: ${{ vars.VERSION }}
 
 jobs:
-  Test:
+  Env_preparation:
     runs-on: ubuntu-latest
     env:
       Job_env: Dev
+    outputs:
+      p_version: ${{ steps.plateform_version.outputs.PLATEFORM_VERSION }}
     steps:
       - name: Accessing Global Variables
         run: |
@@ -28,6 +41,24 @@ jobs:
       - name: Accessing step env variable in different steps
         run: |
           echo "step_message is $step_message"
+      - name: Accessing repository variable defined in github repository settings
+        run: |
+          echo "Repository variable is app_version=${{ vars.VERSION }}" 
+          echo "Accessing repository variable as global env variable is Version=$Version"
+      - name: Accessing secrets defined in github repository settings
+        run: |
+          echo "Secret variable is ${{ secrets.DOCKER_PASSWORD }}"
+      - name: create an output and display value in next job
+        id: plateform_version
+        run: |
+          echo "PLATEFORM_VERSION=MAC" >> "$GITHUB_OUTPUT"
+  test:
+    runs-on: ubuntu-latest
+    needs: Env_preparation
+    steps:
+      - name: Accessing output from previous job
+        run: |
+          echo "plateform version is ${{ needs.Env_preparation.outputs.p_version }}"
 
 
 

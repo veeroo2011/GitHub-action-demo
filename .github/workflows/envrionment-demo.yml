@@ -1,0 +1,26 @@
+name: environment demo
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'select an environment'
+        required: true
+        default: 'dev'
+        type: choice
+        options:
+          - dev
+          - qa
+          - perf
+          - stg
+          - prod
+jobs:
+  Test:
+    runs-on:  ubuntu-latest
+    environment: 
+      name: ${{ inputs.environment }}
+    steps:
+      - name: Application Region availability
+        run: |
+          echo "Environment selected is ${{ inputs.environment }}"
+          echo "Application is available in region ${{ vars.AWS_REGION }}"
