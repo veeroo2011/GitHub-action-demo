@@ -28,6 +28,12 @@ jobs:
       - name: Accessing step env variable in different steps
         run: |
           echo "step_message is $step_message"
+      - name: Accessing repository variable defined in github repository settings
+        run: |
+          echo "Repository variable is app_version=${{ vars.app_version }}" 
+      - name: Accessing secrets defined in github repository settings
+        run: |
+          echo "Secret variable is ${{ secrets.DOCKER_PASSWORD }}"
 
 
 
