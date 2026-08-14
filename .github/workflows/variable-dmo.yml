@@ -6,6 +6,7 @@ on:
 env:
   Global_Name: "Abhi"
   Global_Age: 25
+  Version: ${{ vars.VERSION }}
 
 jobs:
   Test:
@@ -31,6 +32,7 @@ jobs:
       - name: Accessing repository variable defined in github repository settings
         run: |
           echo "Repository variable is app_version=${{ vars.VERSION }}" 
+          echo "Accessing repository variable as global env variable is Version=$Version"
       - name: Accessing secrets defined in github repository settings
         run: |
           echo "Secret variable is ${{ secrets.DOCKER_PASSWORD }}"
