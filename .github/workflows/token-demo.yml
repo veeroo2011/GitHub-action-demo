@@ -1,0 +1,20 @@
+name: OIDC token
+
+on:
+  workflow_dispatch:
+
+permissions: # it allow to request OIDC token from the GitHub Actions runner
+  id-token: write
+  contents: read
+
+jobs:
+  token:
+    runs-on: ubuntu-latest
+    steps:
+      - name: print github reference
+        run: |
+          echo "${{ github.repository }}"
+          echo "${{ github.ref }}"
+          echo "${{ github.ref_name }}"
+          echo "${{ github.actor }}"
+          echo "${{ github.event_name }}"
