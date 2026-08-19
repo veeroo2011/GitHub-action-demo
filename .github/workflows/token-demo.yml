@@ -2,6 +2,15 @@ name: Access aws resource using OIDC token
 
 on:
   workflow_dispatch:
+    inputs:
+      environment:
+        description: Select Environment to deploy
+        required: true
+        type: choice
+        options:
+          - dev
+          - qa
+          - prod
 
 permissions: # it allow to request OIDC token from the GitHub Actions runner
   id-token: write
@@ -10,23 +19,19 @@ permissions: # it allow to request OIDC token from the GitHub Actions runner
 jobs:
   token:
     runs-on: ubuntu-latest
+    environment: 
+      name: ${{ inputs.environment }}
     steps:
-      - name: print github reference
-        run: |
-          echo "${{ github.repository }}"
-          echo "${{ github.ref }}"
-          echo "${{ github.ref_name }}"
-          echo "${{ github.actor }}"
-          echo "${{ github.event_name }}"
       - name: checkout repository
         uses: actions/checkout@v6
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v5
         with:
-          role-to-assume: arn:aws:iam::997554581092:role/GitHubActionsDemoRole
+          role-to-assume: arn:aws:iam::997554581092:role/GitHubActions-${{ inputs.environment}}
           aws-region: us-east-1
-      - name: Verfiy AWS identity
+      - name: Verify AWS identity
         run: |
+          echo "GitHub Environment: ${{ inputs.environment }}"
           aws sts get-caller-identity
       - name: Check S3 bucket objects
         run: |
