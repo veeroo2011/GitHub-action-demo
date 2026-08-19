@@ -1,0 +1,51 @@
+name: deploy terraform using OIDC token
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Select Environment to deploy
+        required: true
+        type: choice
+        options:
+          - Dev
+          - QA
+          - PROD
+permissions: # it allow to request OIDC token from the GitHub Actions runner
+  id-token: write
+  contents: read
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ inputs.environment }}
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v6
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v5
+        with:
+          role-to-assume: arn:aws:iam::997554581092:role/GitHubActions-${{ inputs.environment}}
+          aws-region: us-east-1
+      - name: Verify AWS identity
+        run: |
+          echo "GitHub Environment: ${{ inputs.environment }}"
+          aws sts get-caller-identity
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+      - name: terraform code path
+        run: |
+          cd terraform-code
+      - name: Terraform fmt
+        run: |
+          terraform fmt
+      - name: Terraform init
+        run: |
+          terraform init
+      - name: Terraform validate
+        run: |
+          terraform validate
+      - name: Terraform plan
+        run: |
+          terraform plan
+      
