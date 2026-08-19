@@ -8,9 +8,9 @@ on:
         required: true
         type: choice
         options:
-          - dev
-          - qa
-          - prod
+          - Dev
+          - QA
+          - PROD
 
 permissions: # it allow to request OIDC token from the GitHub Actions runner
   id-token: write
