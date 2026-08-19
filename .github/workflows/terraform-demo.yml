@@ -1,4 +1,4 @@
-name: Access aws resource using OIDC token
+name: deploy terraform using OIDC token
 
 on:
   workflow_dispatch:
@@ -11,41 +11,17 @@ on:
           - Dev
           - QA
           - PROD
-
 permissions: # it allow to request OIDC token from the GitHub Actions runner
   id-token: write
   contents: read
-
 jobs:
-  token:
+  terraform:
     runs-on: ubuntu-latest
-    environment: 
+    environment:
       name: ${{ inputs.environment }}
     steps:
       - name: checkout repository
         uses: actions/checkout@v6
-      - name: Debug OIDC claims
-        env:
-          ACTIONS_ID_TOKEN_REQUEST_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          TOKEN_JSON=$(curl -s \
-            -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
-            "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=sts.amazonaws.com")
-      
-          ID_TOKEN=$(echo "$TOKEN_JSON" | jq -r '.value')
-      
-          PAYLOAD=$(echo "$ID_TOKEN" | cut -d '.' -f2)
-      
-          echo "$PAYLOAD" | base64 -d 2>/dev/null | jq '{
-            iss,
-            aud,
-            sub,
-            repository,
-            repository_owner,
-            environment,
-            ref,
-            ref_type
-          }'
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v5
         with:
@@ -55,6 +31,21 @@ jobs:
         run: |
           echo "GitHub Environment: ${{ inputs.environment }}"
           aws sts get-caller-identity
-      - name: Check S3 bucket objects
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+      - name: terraform code path
         run: |
-          aws s3 ls
+          cd terraform-code
+      - name: Terraform fmt
+        run: |
+          terraform fmt
+      - name: Terraform init
+        run: |
+          terraform init
+      - name: Terraform validate
+        run: |
+          terraform validate
+      - name: Terraform plan
+        run: |
+          terraform plan
+      
