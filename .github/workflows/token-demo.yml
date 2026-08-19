@@ -1,4 +1,4 @@
-name: OIDC token
+name: Access aws resource using OIDC token
 
 on:
   workflow_dispatch:
