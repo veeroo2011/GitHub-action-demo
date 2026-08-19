@@ -17,6 +17,9 @@ permissions: # it allow to request OIDC token from the GitHub Actions runner
 jobs:
   terraform:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: terraform-code
     environment:
       name: ${{ inputs.environment }}
     steps:
