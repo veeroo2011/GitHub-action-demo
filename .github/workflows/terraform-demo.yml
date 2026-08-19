@@ -36,9 +36,6 @@ jobs:
           aws sts get-caller-identity
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
-      - name: terraform code path
-        run: |
-          cd terraform-code
       - name: Terraform fmt
         run: |
           terraform fmt
