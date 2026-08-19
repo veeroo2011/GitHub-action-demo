@@ -46,6 +46,7 @@ jobs:
         run: |
           terraform validate
       - name: Terraform plan
+        working-directory: terraform-code
         run: |
           terraform plan
       
