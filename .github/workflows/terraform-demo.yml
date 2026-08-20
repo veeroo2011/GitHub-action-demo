@@ -28,8 +28,6 @@ jobs:
     defaults: # it can be put at workflow level applicable to all job, or at job level or step level, it will be applied to all steps in the job
       run:
         working-directory: terraform-code
-    environment:
-      name: ${{ inputs.environment }}
     steps:
       - name: checkout repository
         uses: actions/checkout@v6
