@@ -91,7 +91,7 @@ jobs:
           path: terraform-code/tfplan
       - name: terraform show tfplan
         run: |
-          cat terraform-code/tfplan
+          cat tfplan
       - name: terraform ${{ inputs.Action }}
         run: |
           terraform ${{ inputs.Action }} tfplan --auto-approve
