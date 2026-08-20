@@ -11,21 +11,53 @@ on:
           - Dev
           - QA
           - PROD
+      Action:
+        description: Select Action to perform
+        required: true
+        type: choice
+        options:
+          - apply
+          - destroy
+
 permissions: # it allow to request OIDC token from the GitHub Actions runner
   id-token: write
   contents: read
+
 jobs:
-  terraform:
+  terraform-plan:
     runs-on: ubuntu-latest
-    environment:
-      name: ${{ inputs.environment }}
+    defaults: # it can be put at workflow level applicable to all job, or at job level or step level, it will be applied to all steps in the job
+      run:
+        working-directory: terraform-code
     steps:
       - name: checkout repository
         uses: actions/checkout@v6
+      - name: Debug OIDC claims
+        env:
+          ACTIONS_ID_TOKEN_REQUEST_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TOKEN_JSON=$(curl -s \
+            -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
+            "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=sts.amazonaws.com")
+      
+          ID_TOKEN=$(echo "$TOKEN_JSON" | jq -r '.value')
+      
+          PAYLOAD=$(echo "$ID_TOKEN" | cut -d '.' -f2)
+      
+          echo "$PAYLOAD" | base64 -d 2>/dev/null | jq '{
+            iss,
+            aud,
+            sub,
+            repository,
+            repository_owner,
+            environment,
+            ref,
+            ref_type
+          }'
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v5
         with:
-          role-to-assume: arn:aws:iam::997554581092:role/GitHubActions-${{ inputs.environment}}
+          role-to-assume: arn:aws:iam::997554581092:role/GitAction-Plan
           aws-region: us-east-1
       - name: Verify AWS identity
         run: |
@@ -33,9 +65,6 @@ jobs:
           aws sts get-caller-identity
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
-      - name: terraform code path
-        run: |
-          cd terraform-code
       - name: Terraform fmt
         run: |
           terraform fmt
@@ -46,6 +75,41 @@ jobs:
         run: |
           terraform validate
       - name: Terraform plan
+        working-directory: terraform-code
         run: |
-          terraform plan
-      
+          terraform plan -out=tfplan
+      - name: Upload Terraform plan artifact
+        uses: actions/upload-artifact@v5
+        with:
+          name: tfplan
+          path: terraform-code/tfplan
+          
+  terraform-deploy:
+    needs: terraform-plan
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: terraform-code
+    environment:
+      name: ${{inputs.environment }}
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v6
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v5
+        with:
+          role-to-assume: arn:aws:iam::997554581092:role/GitHubActions-${{ inputs.environment}}
+          aws-region: us-east-1
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+      - name: terraform init
+        run: |
+          terraform init
+      - name: Download Terraform plan artifact
+        uses: actions/download-artifact@v5
+        with:
+          name: tfplan
+          path: terraform-code
+      - name: terraform ${{ inputs.Action }}
+        run: |
+          terraform ${{ inputs.Action }} tfplan
