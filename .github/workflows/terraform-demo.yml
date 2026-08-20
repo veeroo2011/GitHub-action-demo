@@ -62,9 +62,7 @@ jobs:
         with:
           name: tfplan
           path: terraform-code/tfplan
-      - name: terraform ${{ inputs.Action }}
-        run: |
-          terraform ${{ inputs.Action }} --auto-approve
+          
   terraform-deploy:
     needs: terraform-plan
     runs-on: ubuntu-latest
