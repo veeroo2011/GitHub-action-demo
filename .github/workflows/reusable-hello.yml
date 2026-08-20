@@ -2,6 +2,11 @@ name: Reusable Hello
 
 on:
   workflow_call:
+    inputs:
+      environment:
+        description: provide an env
+        required: true
+        type: string
 
 jobs:
   say_hello:
@@ -10,4 +15,5 @@ jobs:
       - name: say hello
         run: |
           echo "hello from reusable workflow"
+          echo "env selected is ${{inputs.environment}}"
   
