@@ -29,8 +29,6 @@ jobs:
     defaults: # it can be put at workflow level applicable to all job, or at job level or step level, it will be applied to all steps in the job
       run:
         working-directory: terraform-code
-    environment:
-      name: ${{inputs.environment }}
     steps:
       - name: checkout repository
         uses: actions/checkout@v6
@@ -59,7 +57,7 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v5
         with:
-          role-to-assume: arn:aws:iam::997554581092:role/GitHubActions-${{ inputs.environment}}
+          role-to-assume: arn:aws:iam::997554581092:role/GitAction-Plan
           aws-region: us-east-1
       - name: Verify AWS identity
         run: |
@@ -92,6 +90,8 @@ jobs:
     defaults:
       run:
         working-directory: terraform-code
+    environment:
+      name: ${{inputs.environment }}
     steps:
       - name: checkout repository
         uses: actions/checkout@v6
