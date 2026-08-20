@@ -17,7 +17,7 @@ permissions: # it allow to request OIDC token from the GitHub Actions runner
 jobs:
   terraform:
     runs-on: ubuntu-latest
-    defaults:
+    defaults: # it can be put at workflow level applicable to all job, or at job level or step level, it will be applied to all steps in the job
       run:
         working-directory: terraform-code
     environment:
@@ -49,4 +49,7 @@ jobs:
         working-directory: terraform-code
         run: |
           terraform plan
+      - name: terraform apply
+        run: |
+          terraform apply --auto-approve
       
