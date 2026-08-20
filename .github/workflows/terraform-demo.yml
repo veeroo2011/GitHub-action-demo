@@ -88,10 +88,7 @@ jobs:
         uses: actions/download-artifact@v5
         with:
           name: tfplan
-          path: terraform-code/tfplan
-      - name: terraform show tfplan
-        run: |
-          cat tfplan
+          path: terraform-code
       - name: terraform ${{ inputs.Action }}
         run: |
           terraform ${{ inputs.Action }} tfplan --auto-approve
