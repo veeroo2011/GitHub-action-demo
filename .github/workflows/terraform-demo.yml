@@ -11,6 +11,14 @@ on:
           - Dev
           - QA
           - PROD
+      Action:
+        description: Select Action to perform
+        required: true
+        type: choice
+        options:
+          - apply
+          - destroy
+
 permissions: # it allow to request OIDC token from the GitHub Actions runner
   id-token: write
   contents: read
@@ -49,7 +57,7 @@ jobs:
         working-directory: terraform-code
         run: |
           terraform plan
-      - name: terraform apply
+      - name: terraform ${{ inputs.Action }}
         run: |
-          terraform apply --auto-approve
-      
+          terraform ${{ inputs.Action }} --auto-approve
+        
