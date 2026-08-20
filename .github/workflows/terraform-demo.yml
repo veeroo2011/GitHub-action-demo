@@ -23,7 +23,7 @@ permissions: # it allow to request OIDC token from the GitHub Actions runner
   id-token: write
   contents: read
 jobs:
-  terraform:
+  terraform-plan:
     runs-on: ubuntu-latest
     defaults: # it can be put at workflow level applicable to all job, or at job level or step level, it will be applied to all steps in the job
       run:
@@ -56,8 +56,44 @@ jobs:
       - name: Terraform plan
         working-directory: terraform-code
         run: |
-          terraform plan
+          terraform plan -out=tfplan
+      - name: Upload Terraform plan artifact
+        uses: actions/upload-artifact@v5
+        with:
+          name: tfplan
+          path: terraform-code/tfplan
       - name: terraform ${{ inputs.Action }}
         run: |
           terraform ${{ inputs.Action }} --auto-approve
-        
+  terraform-deploy:
+    needs: terraform-plan
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: terraform-code
+    environment:
+      name: ${{ inputs.environment }}
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v6
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v5
+        with:
+          role-to-assume: arn:aws:iam::997554581092:role/GitHubActions-${{ inputs.environment}}
+          aws-region: us-east-1
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+      - name: terraform init
+        run: |
+          terraform init
+      - name: Download Terraform plan artifact
+        uses: actions/download-artifact@v5
+        with:
+          name: tfplan
+          path: terraform-code/tfplan
+      - name: terraform show tfplan
+        run: |
+          cat terraform-code/tfplan
+      - name: terraform ${{ inputs.Action }}
+        run: |
+          terraform ${{ inputs.Action }} tfplan --auto-approve
