@@ -91,4 +91,4 @@ jobs:
           path: terraform-code
       - name: terraform ${{ inputs.Action }}
         run: |
-          terraform ${{ inputs.Action }} tfplan --auto-approve
+          terraform ${{ inputs.Action }} tfplan
