@@ -7,7 +7,7 @@ on:
         description: Select Environment to deploy
         required: true
         type: string
-      Action:
+      action:
         description: Select Action to perform
         required: true
         type: string
@@ -63,10 +63,16 @@ jobs:
       - name: Terraform validate
         run: |
           terraform validate
-      - name: Terraform plan
+      - name: Terraform plan for apply
+        if: ${{ inputs.action == 'apply' }}
         working-directory: terraform-code
         run: |
           terraform plan -out=tfplan
+      - name: Terraform plan for destory
+        if: ${{ inputs.action == 'destroy' }}
+        working-directory: terraform-code
+        run: |
+          terraform plan -destroy -out=tfplan
       - name: Upload Terraform plan artifact
         uses: actions/upload-artifact@v5
         with:
@@ -99,7 +105,7 @@ jobs:
         with:
           name: tfplan
           path: terraform-code
-      - name: terraform ${{ inputs.Action }}
+      - name: terraform ${{ inputs.action }} saved tfplan
         run: |
-          terraform ${{ inputs.Action }} tfplan
+          terraform ${{ inputs.action }} tfplan
 

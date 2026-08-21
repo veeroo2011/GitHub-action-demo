@@ -11,7 +11,7 @@ on:
           - Dev
           - QA
           - PROD
-      Action:
+      action:
         description: Select Action to perform
         required: true
         type: choice
@@ -28,4 +28,4 @@ jobs:
     uses: ./.github/workflows/reusable-terraform.yml
     with:
       environment: ${{ inputs.environment }}
-      Action: ${{ inputs.Action }}
+      Action: ${{ inputs.action }}
