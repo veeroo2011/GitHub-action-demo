@@ -2,7 +2,19 @@ name: call reusable workflow
 
 on:
   workflow_dispatch:
+    inputs:
+      environment:
+        description: provide an env
+        required: true
+        type: choice
+        options:
+          - dev
+          - qa
+          - stg
+          - prod
 
 jobs:
   call-hello:
     uses: ./.github/workflows/reusable-hello.yml
+    with:
+      environment: ${{inputs.environment}}
