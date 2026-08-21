@@ -73,4 +73,33 @@ jobs:
           name: tfplan
           path: terraform-code/tfplan
 
+  terraform-deploy:
+    needs: terraform-plan
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: terraform-code
+    environment:
+      name: ${{inputs.environment }}
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v6
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v5
+        with:
+          role-to-assume: arn:aws:iam::997554581092:role/GitHubActions-${{ inputs.environment}}
+          aws-region: us-east-1
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+      - name: terraform init
+        run: |
+          terraform init
+      - name: Download Terraform plan artifact
+        uses: actions/download-artifact@v5
+        with:
+          name: tfplan
+          path: terraform-code
+      - name: terraform ${{ inputs.Action }}
+        run: |
+          terraform ${{ inputs.Action }} tfplan
 
