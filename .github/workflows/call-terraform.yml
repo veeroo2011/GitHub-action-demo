@@ -1,0 +1,31 @@
+name: call terraform to plan
+
+on:
+  workflow_dispatch:
+   inputs:
+      environment:
+        description: Select Environment to deploy
+        required: true
+        type: choice
+        options:
+          - Dev
+          - QA
+          - PROD
+      Action:
+        description: Select Action to perform
+        required: true
+        type: choice
+        options:
+          - apply
+          - destroy
+
+permissions: # it allow to request OIDC token from the GitHub Actions runner
+  id-token: write
+  contents: read
+
+jobs:
+  terraform:
+    uses: ./.github/workflows/reusable-terraform.yml
+    with:
+      environment: ${{ inputs.environment }}
+      Action: ${{ inputs.Action }}
