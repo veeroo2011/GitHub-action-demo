@@ -107,5 +107,5 @@ jobs:
           path: terraform-code
       - name: terraform ${{ inputs.action }} saved tfplan
         run: |
-          terraform ${{ inputs.action }} tfplan
+          terraform apply tfplan
 
