@@ -1,0 +1,16 @@
+name: call composite demo
+
+on:
+  workflow_dispatch
+
+jobs:
+  composite:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Run my composite Action
+        uses: ./.github/actions/hello/action.yml # calling composite function
+      - name: back to normal workflow
+        run: |
+         echo "Back in the main workflow"
