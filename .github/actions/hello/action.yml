@@ -1,0 +1,17 @@
+name: Hello from composit action
+
+description: A simple reusable composite action
+
+runs:
+  using: composite # It tells GitHub that This is a Composite Action.
+  steps:
+    - name: say Hello
+      shell: bash
+      run: |
+        echo "Hello from composite Action"
+    - name: show Runner
+      shell: bash
+      run: |
+        echo "Running on $RUNNER_OS"
+
+
