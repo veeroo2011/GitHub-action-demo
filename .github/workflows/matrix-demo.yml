@@ -1,0 +1,21 @@
+name: matrix demo
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        environment:
+          - dev
+          - qa
+        region:
+          - us-east-1
+          - eu-west-1
+    steps:
+      - name: show configuration
+        run: |
+          echo "Environment is ${{ matrix.environment }}"
+          echo "Region is ${{ matrix.region }}"
