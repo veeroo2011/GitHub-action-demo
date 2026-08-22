@@ -11,6 +11,9 @@ on:
         description: Select Action to perform
         required: true
         type: string
+    secrets:
+      SONAR_TOKEN:
+        required: true    
 
 jobs:
   terraform-plan:
@@ -78,6 +81,9 @@ jobs:
         with:
           name: tfplan
           path: terraform-code/tfplan
+      - name: Access sonar token
+        run: |
+          echo "token is ${{ secrets.SONAR_TOKEN }}"
 
   terraform-deploy:
     needs: terraform-plan
