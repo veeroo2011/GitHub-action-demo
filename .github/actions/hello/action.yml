@@ -2,6 +2,17 @@ name: Hello from composit action
 
 description: A simple reusable composite action
 
+inputs:
+  application:
+    description: Name of the Apps
+    required: true
+  environment:
+    description: Select env
+    required: true
+  version:
+    description: Apps version
+    required: true
+    default: 1.0
 runs:
   using: composite # It tells GitHub that This is a Composite Action.
   steps:
@@ -13,5 +24,7 @@ runs:
       shell: bash
       run: |
         echo "Running on $RUNNER_OS"
-
+        echo "Application is ${{ inputs.application }}"
+        echo "Environment is ${{ inputs.environment }}"
+        echo "Application version is ${{ inputs.version }}"
 
