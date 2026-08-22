@@ -10,7 +10,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
       - name: Run my composite Action
-        uses: ./.github/actions/hello/action.yml # calling composite function
+        id: app
+        uses: ./.github/actions/hello # calling composite function
+        with:
+          application: "Hotel Management system"
+          environment: staging
+          version: 1.2
+      - name: Get apps generated info as output
+        run: |
+          echo "${{ steps.app.outputs.app_info }}"
       - name: back to normal workflow
         run: |
          echo "Back in the main workflow"
