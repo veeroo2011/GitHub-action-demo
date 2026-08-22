@@ -13,7 +13,7 @@ jobs:
         id: app
         uses: ./.github/actions/hello # calling composite function
         with:
-          application: Hotel Management system
+          application: "Hotel Management system"
           environment: staging
           version: 1.2
       - name: Get apps generated info as output
