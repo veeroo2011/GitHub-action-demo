@@ -13,6 +13,10 @@ inputs:
     description: Apps version
     required: true
     default: 1.0
+outputs:
+  app_info:
+    description: Information about application
+    value: ${{ steps.generate.outputs.app_info }}
 runs:
   using: composite # It tells GitHub that This is a Composite Action.
   steps:
@@ -27,4 +31,12 @@ runs:
         echo "Application is ${{ inputs.application }}"
         echo "Environment is ${{ inputs.environment }}"
         echo "Application version is ${{ inputs.version }}"
+    - name: Generate application info
+      id: generate
+      shell: bash
+      run: |
+       APP_INFO= "${{ inputs.application}}-${{ inputs.environment}}"
+       echo $APP_INFO
+       echo "app_info=$APP_INFO" >> "$GITHUB_OUTPUT"
+
 
