@@ -10,7 +10,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
       - name: Run my composite Action
-        uses: ./.github/actions/hello/action.yml # calling composite function
+        uses: ./.github/actions/hello # calling composite function
       - name: back to normal workflow
         run: |
          echo "Back in the main workflow"
