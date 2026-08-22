@@ -35,8 +35,8 @@ runs:
       id: generate
       shell: bash
       run: |
-       APP_INFO= "${{ inputs.application}}-${{ inputs.environment}}"
-       echo $APP_INFO
-       echo "app_info=$APP_INFO" >> "$GITHUB_OUTPUT"
+        APP_INFO= "${{ inputs.application}}-${{ inputs.environment}}"
+        echo $APP_INFO
+        echo "app_info=$APP_INFO" >> "$GITHUB_OUTPUT"
 
 

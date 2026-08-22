@@ -18,7 +18,7 @@ jobs:
           version: 1.2
       - name: Get apps generated info as output
         run: |
-          echo "{{ steps.app.outputs.app_info }}"
+          echo "${{ steps.app.outputs.app_info }}"
       - name: back to normal workflow
         run: |
          echo "Back in the main workflow"
