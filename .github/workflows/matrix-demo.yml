@@ -11,9 +11,16 @@ jobs:
         environment:
           - dev
           - qa
+          - prod
         region:
           - us-east-1
           - eu-west-1
+        exclude:
+          - environment: dev
+            region: eu-west-1
+
+          - environment: qa
+            region: eu-west-1
     steps:
       - name: show configuration
         run: |
