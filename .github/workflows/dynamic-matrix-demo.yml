@@ -20,6 +20,10 @@ name: Dynamic Matrix Demo
 
 on:
   workflow_dispatch:
+    
+permissions:
+  id-token: write
+  contents: read
 
 jobs:
 
