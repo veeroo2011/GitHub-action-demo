@@ -36,17 +36,17 @@ jobs:
       matrix:
         include:
 
-          - environment: dev
+          - environment: Dev
             region: us-east-1
             aws_role: GitHubActions-Dev
             approval_required: false
 
-          - environment: qa
+          - environment: QA
             region: us-east-1
             aws_role: GitHubActions-QA
             approval_required: false
 
-          - environment: prod
+          - environment: PROD
             region: eu-west-1
             aws_role: GitHubActions-PROD
             approval_required: true
