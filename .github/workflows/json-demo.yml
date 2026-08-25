@@ -1,0 +1,35 @@
+name: Dynamic Matrix JSON Demo
+
+on:
+  workflow_dispatch:
+
+jobs:
+
+  prepare:
+
+    runs-on: ubuntu-latest
+
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+
+    steps:
+
+      - name: Create matrix
+        id: set-matrix
+        run: |
+          echo 'matrix={"environment":["DEV","QA","PROD"]}' >> "$GITHUB_OUTPUT"
+
+  deploy:
+
+    needs: prepare
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix: ${{ fromJSON(needs.prepare.outputs.matrix) }}
+
+    steps:
+
+      - name: Show environment
+        run: |
+          echo "Environment: ${{ matrix.environment }}"
