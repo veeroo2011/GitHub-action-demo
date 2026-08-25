@@ -22,3 +22,35 @@ jobs:
           echo "Environment: ${{ inputs.environment }}"
           echo "Region: ${{ inputs.region }}"
           echo "AWS Role: ${{ inputs.aws_role }}"
+      - name: Debug OIDC claims
+        env:
+          ACTIONS_ID_TOKEN_REQUEST_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TOKEN_JSON=$(curl -s \
+            -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
+            "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=sts.amazonaws.com")
+      
+          ID_TOKEN=$(echo "$TOKEN_JSON" | jq -r '.value')
+      
+          PAYLOAD=$(echo "$ID_TOKEN" | cut -d '.' -f2)
+      
+          echo "$PAYLOAD" | base64 -d 2>/dev/null | jq '{
+            iss,
+            aud,
+            sub,
+            repository,
+            repository_owner,
+            environment,
+            ref,
+            ref_type
+          }'
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v5
+        with:
+          role-to-assume: arn:aws:iam::997554581092:role/${{ inputs.aws_role }}
+          aws-region: ${{ inputs.region }}
+
+      - name: Verify AWS identity
+        run: |
+          aws sts get-caller-identity
