@@ -13,10 +13,10 @@ jobs:
             aws_role: GitHubActions-Dev
           - environment: QA
             region: us-east-1
-            aws_role: GitHubActions-Dev
+            aws_role: GitHubActions-QA
           - environment: PROD
             region: us-east-1
-            aws_role: GitHubActions-Dev
+            aws_role: GitHubActions-PROD
 
     uses: ./.github/workflows/reusable-matrix.yml
     with:
