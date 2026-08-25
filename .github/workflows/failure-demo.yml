@@ -23,7 +23,7 @@ jobs:
         run: exit 1
     
       - name: Show failure message
-        if: failure() # here Test steps will failed but this steps will still executed
+        if: failure() # here Test steps will failed but this steps will still executed used for failed notification
         run: echo "Something failed"
       - name: Generate report
         if: always() # it always be executed if previous job failed or pass

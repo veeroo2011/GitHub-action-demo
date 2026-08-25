@@ -1,0 +1,66 @@
+name: Terraform Condition Demo
+
+on:
+  workflow_dispatch:
+    inputs:
+
+      environment:
+        description: Select environment
+        required: true
+        type: choice
+        options:
+          - DEV
+          - QA
+          - PROD
+
+      action:
+        description: Select action
+        required: true
+        type: choice
+        options:
+          - plan
+          - apply
+          - destroy
+
+jobs:
+
+  terraform:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Show selection
+        run: |
+          echo "Branch: ${{ github.ref_name }}"
+          echo "Environment: ${{ inputs.environment }}"
+          echo "Action: ${{ inputs.action }}"
+
+      - name: DEV deployment
+        if: >
+          inputs.environment == 'DEV' &&
+          inputs.action == 'apply'
+        run: |
+          echo "DEV apply is allowed"
+
+      - name: QA deployment
+        if: >
+          inputs.environment == 'QA' &&
+          inputs.action == 'apply'
+        run: |
+          echo "QA apply is allowed"
+
+      - name: PROD deployment
+        if: >
+          github.ref_name == 'main' &&
+          inputs.environment == 'PROD' &&
+          inputs.action == 'apply'
+        run: |
+          echo "PROD apply is allowed"
+
+      - name: Production destroy
+        if: >
+          github.ref_name == 'main' &&
+          inputs.environment == 'PROD' &&
+          inputs.action == 'destroy'
+        run: |
+          echo "PROD destroy selected"

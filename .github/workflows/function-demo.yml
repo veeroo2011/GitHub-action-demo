@@ -1,0 +1,44 @@
+name: Expression Functions Demo
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Select environment
+        required: true
+        type: choice
+        options:
+          - DEV
+          - QA
+          - PROD
+
+jobs:
+
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Show branch
+        run: |
+          echo "Branch: ${{ github.ref_name }}"
+
+      - name: Contains main
+        if: ${{ contains(github.ref_name, 'main') }}
+        run: |
+          echo "Branch contains main"
+
+      - name: Feature branch
+        if: ${{ startsWith(github.ref_name, 'feature/') }}
+        run: |
+          echo "This is a feature branch"
+
+      - name: Release branch
+        if: ${{ endsWith(github.ref_name, '-release') }}
+        run: |
+          echo "This is a release branch"
+
+      - name: Production selected
+        if: ${{ contains(inputs.environment, 'PROD') }}
+        run: |
+          echo "Production environment selected"
