@@ -8,8 +8,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: create build file
-        run: 
+        run: |
           mkdir -p build reports logs
+          
           echo "Application package" > build/app.txt
           echo "test passed" > reports/test.txt
           echo "Application logs" > logs/app_logs.txt
