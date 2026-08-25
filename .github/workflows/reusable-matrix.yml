@@ -1,0 +1,24 @@
+name: Reusable Matrix demo
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        description: select env
+        required: true
+        type: string
+      region:
+        required: true
+        type: string
+      aws_role:
+        required: true
+        type: string
+jobs:
+  show-config:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Show configuration
+        run: |
+          echo "Environment: ${{ inputs.environment }}"
+          echo "Region: ${{ inputs.region }}"
+          echo "AWS Role: ${{ inputs.aws_role }}"
