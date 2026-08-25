@@ -9,6 +9,8 @@ permissions:
 
 jobs:
   deploy:
+    environment:
+      name: ${{ matrix.environment }}
     strategy:
       matrix:
         include:
