@@ -1,0 +1,30 @@
+# if test steps failed then deploy job will be skipped
+#
+name: failure-demo
+
+on:
+  workflow_dispatch:
+
+jobs:
+  failure-test:
+    runs-on: ubuntu-latest
+    steps:
+    
+      - name: Build
+        run: echo "Building"
+    
+      - name: Test
+        run: echo "Testing"
+    
+      - name: Deploy
+        if: success() # if test steps failed then deploy job will be skipped
+        run: echo "Deploying"
+      - name: Test
+        run: exit 1
+    
+      - name: Show failure message
+        if: failure() # here Test steps will failed but this steps will still executed
+        run: echo "Something failed"
+      - name: Generate report
+        if: always() # it always be executed if previous job failed or pass
+        run: echo "Generating report"

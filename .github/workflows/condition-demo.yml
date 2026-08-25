@@ -1,0 +1,30 @@
+name: Conditions Demo
+
+on:
+  workflow_dispatch:
+
+jobs:
+
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Step 1 - Success
+        run: echo "Step 1 succeeded"
+
+      - name: Step 2 - Failure
+        run: |
+          echo "Step 2 will fail"
+          exit 1
+
+      - name: Step 3 - Normal step
+        run: echo "Step 3 executed"
+
+      - name: Step 4 - Failure handler
+        if: failure()
+        run: echo "A previous step failed"
+
+      - name: Step 5 - Always
+        if: always()
+        run: echo "This always runs"
