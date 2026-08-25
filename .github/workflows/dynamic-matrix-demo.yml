@@ -1,0 +1,55 @@
+# The goal is to create a matrix where each environment carries its own configuration
+# dev
+#  ├── region: us-east-1
+#  ├── role: GitHubActions-Dev
+#  └── approval: false
+# 
+# qa
+#  ├── region: us-east-1
+#  ├── role: GitHubActions-QA
+#  └── approval: false
+# 
+# prod
+#  ├── region: eu-west-1
+#  ├── role: GitHubActions-PROD
+#  └── approval: true
+
+# Create an environment configuration matrix
+
+name: Dynamic Matrix Demo
+
+on:
+  workflow_dispatch:
+
+jobs:
+
+  deploy:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        include:
+
+          - environment: dev
+            region: us-east-1
+            aws_role: GitHubActions-Dev
+            approval_required: false
+
+          - environment: qa
+            region: us-east-1
+            aws_role: GitHubActions-QA
+            approval_required: false
+
+          - environment: prod
+            region: eu-west-1
+            aws_role: GitHubActions-PROD
+            approval_required: true
+
+    steps:
+
+      - name: Show deployment configuration
+        run: |
+          echo "Environment: ${{ matrix.environment }}"
+          echo "Region: ${{ matrix.region }}"
+          echo "AWS Role: ${{ matrix.aws_role }}"
+          echo "Approval Required: ${{ matrix.approval_required }}"
