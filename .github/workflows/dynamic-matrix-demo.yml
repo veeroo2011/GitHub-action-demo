@@ -53,3 +53,12 @@ jobs:
           echo "Region: ${{ matrix.region }}"
           echo "AWS Role: ${{ matrix.aws_role }}"
           echo "Approval Required: ${{ matrix.approval_required }}"
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v5
+        with:
+          role-to-assume: arn:aws:iam::997554581092:role/${{ matrix.aws_role }}
+          aws-region: ${{ matrix.region }}
+
+      - name: Verify AWS identity
+        run: |
+          aws sts get-caller-identity     
