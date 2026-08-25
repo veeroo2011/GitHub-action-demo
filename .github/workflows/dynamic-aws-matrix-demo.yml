@@ -1,0 +1,59 @@
+name: Dynamic AWS Matrix
+
+on:
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+
+  prepare:
+
+    runs-on: ubuntu-latest
+
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+
+    steps:
+
+      - name: Create deployment matrix
+        id: set-matrix
+        run: |
+          echo 'matrix={
+            "include": [
+              {
+                "environment": "DEV",
+                "region": "us-east-1",
+                "aws_role": "GitHubActions-Dev"
+              },
+              {
+                "environment": "QA",
+                "region": "us-east-1",
+                "aws_role": "GitHubActions-QA"
+              },
+              {
+                "environment": "PROD",
+                "region": "us-east-1",
+                "aws_role": "GitHubActions-PROD"
+              }
+            ]
+          }' >> "$GITHUB_OUTPUT"
+
+  deploy:
+
+    needs: prepare
+
+    strategy:
+      matrix: ${{ fromJSON(needs.prepare.outputs.matrix) }}
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Show configuration
+        run: |
+          echo "Environment: ${{ matrix.environment }}"
+          echo "Region: ${{ matrix.region }}"
+          echo "AWS Role: ${{ matrix.aws_role }}"
