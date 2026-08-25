@@ -1,0 +1,26 @@
+name: call reusable matrix workflow
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    strategy:
+      matrix:
+        include:
+          - environment: Dev
+            region: us-east-1
+            aws_role: GitHubActions-Dev
+          - environment: QA
+            region: us-east-1
+            aws_role: GitHubActions-Dev
+          - environment: PROD
+            region: us-east-1
+            aws_role: GitHubActions-Dev
+
+    uses: ./.gitwork/workflow/reusable-matrix.yml
+    with:
+      environment: ${{ matrix.environment }}
+      region: ${{ matrix.region }}
+      aws_role: ${{ matrix.aws_role }}
+          
