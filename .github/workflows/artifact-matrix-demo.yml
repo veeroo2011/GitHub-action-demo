@@ -1,0 +1,23 @@
+name: Artifact Matrix Demo
+
+on:
+  workflow_dispatch: # allows manual runs from the Actions tab
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        environment:
+          - dev
+          - qa
+          - prod
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: create plan
+        run: echo "terraform plan for ${{ matrix.environment }}" > tfplan
+      - name: upload artifacts
+        uses: actions/upload-artifact@v5
+        with:
+          name: tfplan-${{ matrix.environment}}
+          path: tfplan

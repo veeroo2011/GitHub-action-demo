@@ -8,11 +8,31 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: create build file
-        run: 
+        run: |
+          mkdir -p build reports logs
+          
+          echo "Application package" > build/app.txt
+          echo "test passed" > reports/test.txt
+          echo "Application logs" > logs/app_logs.txt
           echo "This is a build artifact" > build.txt
           echo "This file is created by build job">> build.txt
       - name: show build file
         run: cat build.txt
+      - name: upload Application package
+        uses: actions/upload-artifact@v5
+        with:
+          name: application
+          path: build/
+      - name: upload Report
+        uses: actions/upload-artifact@v5
+        with:
+          name: report
+          path: reports/
+      - name: upload app log
+        uses: actions/upload-artifact@v5
+        with:
+          name: app_log
+          path: logs/
       - name: upload build artifact
         uses: actions/upload-artifact@v5
         with:
@@ -24,6 +44,21 @@ jobs:
     steps:
       - name: check build artifact before downloading
         run: ls -lR
+      - name: Download application package
+        uses: actions/download-artifact@v5
+        with:
+          name: application
+          path: artifacts/application
+      - name: Download application log
+        uses: actions/download-artifact@v5
+        with:
+          name: app_log
+          path: artifacts/app_log
+      - name: Download application reports
+        uses: actions/download-artifact@v5
+        with:
+          name: report
+          path: artifacts/report
       - name: download build artifact
         uses: actions/download-artifact@v5
         with:
