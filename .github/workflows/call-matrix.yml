@@ -18,7 +18,7 @@ jobs:
             region: us-east-1
             aws_role: GitHubActions-Dev
 
-    uses: ./.gitwork/workflow/reusable-matrix.yml
+    uses: ./.github/workflows/reusable-matrix.yml
     with:
       environment: ${{ matrix.environment }}
       region: ${{ matrix.region }}
