@@ -11,11 +11,26 @@ jobs:
         environment:
           - dev
           - qa
+          - prod
         region:
           - us-east-1
           - eu-west-1
+        exclude:
+          - environment: dev
+            region: eu-west-1
+
+          - environment: qa
+            region: eu-west-1
+        include:
+          - environment: prod
+            region: eu-west-1
+            instance_type: t3.medium
+          - environment: dev
+            region: us-east-1
+            instance_type: t2.micro
     steps:
       - name: show configuration
         run: |
           echo "Environment is ${{ matrix.environment }}"
           echo "Region is ${{ matrix.region }}"
+          echo "Instance type is ${{ matrix.instance_type }}"
