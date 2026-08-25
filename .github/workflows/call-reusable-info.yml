@@ -1,0 +1,26 @@
+name: Call Reusable Info
+
+on:
+  workflow_dispatch:
+
+jobs:
+
+  call-info:
+
+    uses: ./.github/workflows/reusable-info-demo.yml
+
+    with:
+      environment: PROD
+
+
+  display:
+
+    needs: call-info
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Display output
+        run: |
+          echo "Deployment info: ${{ needs.call-info.outputs.deployment_info }}"

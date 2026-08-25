@@ -1,0 +1,34 @@
+name: Reusable Info
+
+on:
+
+  workflow_call:
+
+    inputs:
+
+      environment:
+        required: true
+        type: string
+
+    outputs:
+
+      deployment_info:
+        description: Deployment information
+        value: ${{ jobs.info.outputs.deployment_info }}
+
+jobs:
+
+  info:
+
+    runs-on: ubuntu-latest
+
+    outputs:
+
+      deployment_info: ${{ steps.generate.outputs.deployment_info }}
+
+    steps:
+
+      - name: Generate deployment information
+        id: generate
+        run: |
+          echo "deployment_info=Deployment-${{ inputs.environment }}" >> "$GITHUB_OUTPUT"

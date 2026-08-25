@@ -1,0 +1,78 @@
+name: Safe Deployment Demo
+
+on:
+  workflow_dispatch:
+
+jobs:
+
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Test
+        run: |
+          echo "Tests passed"
+
+
+  security:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Security
+        run: |
+          echo "Security passed"
+
+
+  plan:
+    needs:
+      - test
+      - security
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Terraform Plan
+        run: |
+          echo "Terraform plan passed"
+
+
+  deploy:
+    needs:
+      - test
+      - security
+      - plan
+
+    if: >
+      needs.test.result == 'success' &&
+      needs.security.result == 'success' &&
+      needs.plan.result == 'success'
+
+    runs-on: ubuntu-latest
+
+    environment:
+      name: PROD
+
+    steps:
+      - name: Apply
+        run: |
+          echo "Terraform apply"
+
+
+  report:
+    needs:
+      - test
+      - security
+      - plan
+      - deploy
+
+    if: always()
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Report
+        run: |
+          echo "Test: ${{ needs.test.result }}"
+          echo "Security: ${{ needs.security.result }}"
+          echo "Plan: ${{ needs.plan.result }}"
+          echo "Deploy: ${{ needs.deploy.result }}"
